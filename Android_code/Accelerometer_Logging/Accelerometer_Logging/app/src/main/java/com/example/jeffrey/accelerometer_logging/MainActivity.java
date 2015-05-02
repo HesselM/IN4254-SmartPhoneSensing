@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -65,11 +66,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        /*write lines to idintify log file*/
+        /*create logfile and write it's write headers*/
         currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
         String firstLogRow = "statvalue 1:rest, 2:Queuing, 3:walking.";
         appendLog(firstLogRow);
-        String secondLogRow = "SampleNum " + "statValue" + "X " + "Y " + "Z ";
+        String secondLogRow = "SampleNum " + "statusValue " + "X " + "Y " + "Z ";
         appendLog(secondLogRow);
     }
 
@@ -95,16 +96,28 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * what to do when app is brought to the background
+     */
     @Override
     protected void onPause() {
         super.onPause();
+        currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
         mSensorManager.unregisterListener(this);
     }
 
+    /**
+     * what to do if the ap is brought back to the foreground
+     */
     @Override
     protected void onResume() {
-        super.onResume();
+        /*used to create a new file*/
+        currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+        /*re-register listener*/
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        super.onResume();
     }
 
     @Override
@@ -179,6 +192,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         {
             try
             {
+                Toast toast = Toast.makeText(getApplicationContext(), "created new log", Toast.LENGTH_SHORT);
+                toast.show();
                 logFile.createNewFile();
             }
             catch (IOException e)
