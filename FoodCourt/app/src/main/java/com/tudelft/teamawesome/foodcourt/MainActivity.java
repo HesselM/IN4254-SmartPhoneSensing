@@ -1,5 +1,7 @@
 package com.tudelft.teamawesome.foodcourt;
 
+import android.content.Context;
+import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +12,18 @@ import android.widget.RadioButton;
 
 public class MainActivity extends ActionBarActivity {
     //global var to track selected activity
-    MotionType selectedMotionType = MotionType.IDLE;
+    private MotionType selectedMotionType = MotionType.IDLE;
+    private Accelerometer accelerometer;
+    private SensorManager mSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //setup Accelerometer
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = new Accelerometer(mSensorManager);
     }
 
 
@@ -65,15 +73,18 @@ public class MainActivity extends ActionBarActivity {
                 }
                 break;
         }
+
+        //update selected motion in accelerometer
+        accelerometer.onMotionTypeChange(selectedMotionType);
     }
 
     //Controls to start/stop accelerometer
     public void startAccel(View view) {
-
+        accelerometer.start();
     }
 
     public void stopAccel(View view) {
-
+        accelerometer.stop();
     }
 
 }
