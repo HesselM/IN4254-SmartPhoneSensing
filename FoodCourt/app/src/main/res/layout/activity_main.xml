@@ -29,14 +29,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/walking"
-                android:onClick="onRadioButtonClicked"/>
+                android:onClick="activityChanged"/>
 
             <RadioButton
                 android:id="@+id/rad_ActStatusQueueing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/queueing"
-                android:onClick="onRadioButtonClicked"/>
+                android:onClick="activityChanged"/>
 
             <RadioButton
                 android:id="@+id/rad_ActStatusIdle"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/idle"
                 android:checked="true"
-                android:onClick="onRadioButtonClicked"/>
+                android:onClick="activityChanged"/>
         </RadioGroup>
     </LinearLayout>
 
@@ -63,12 +63,15 @@
             android:layout_weight=".5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="startAccel"
             android:text="@string/accelStart" />
+
         <Button
             android:id="@+id/btn_AccelStop"
             android:layout_weight=".5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:onClick="stopAccel"
             android:text="@string/accelStop" />
 
     </LinearLayout>
