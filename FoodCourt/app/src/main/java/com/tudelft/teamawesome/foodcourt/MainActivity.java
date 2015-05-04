@@ -1,6 +1,7 @@
 package com.tudelft.teamawesome.foodcourt;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,22 +9,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
     //global var to track selected activity
-    private MotionType selectedMotionType = MotionType.IDLE;
-    private Accelerometer accelerometer;
+    private MotionType selectedMotionType;
+
+    // Manager for sensors
     private SensorManager mSensorManager;
+    private Accelerometer accelerometer;
+
+    // API for database
+    private dbAPI dbapi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //open db-API
+        dbapi = new dbAPI(this);
+
         //setup Accelerometer
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = new Accelerometer(mSensorManager);
+        accelerometer.setDatabaseAPI(dbapi);
+
+        //setup initial values
+        selectedMotionType = MotionType.IDLE;
+        accelerometer.onMotionTypeChange(selectedMotionType);
+
     }
 
 
@@ -81,10 +97,21 @@ public class MainActivity extends ActionBarActivity {
     //Controls to start/stop accelerometer
     public void startAccel(View view) {
         accelerometer.start();
+        this.showAccelData();
     }
 
     public void stopAccel(View view) {
         accelerometer.stop();
+        this.showAccelData();
     }
 
+    //test function to display data on screen from database
+    public void showAccelData(){
+        TextView txtAccel = (TextView) findViewById(R.id.txt_Accel);
+        CharSequence text;
+        text = "max run:" + dbapi.getMaxRun() + "\n";
+        text = text + "records:" + dbapi.getRecordCount() + "\n";
+        text = text + "motionType:" + selectedMotionType.getValue() + "\n";
+        txtAccel.setText(text);
+    }
 }

@@ -10,4 +10,8 @@ public enum MotionType {
     private MotionType(int value) {
         this.value = value;
     }
+
+    public int getValue() {
+        return value;
+    }
 }
