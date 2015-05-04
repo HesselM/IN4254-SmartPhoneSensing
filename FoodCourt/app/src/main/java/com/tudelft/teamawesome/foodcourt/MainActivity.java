@@ -5,9 +5,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    //Activity Enum and assigned value
+    public enum Activity {
+        WALKING(3), QUEUEING(2), IDLE(1);
+        private int value;
+
+        private Activity(int value) {
+            this.value = value;
+        }
+    }
+
+    //global var to track selected activity
+    Activity selectedActivity = Activity.IDLE;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +55,32 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    //Called when a different activity is selected
     public void activityChanged(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
 
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.rad_ActStatusIdle:
+                if (checked) {
+                    selectedActivity = Activity.IDLE;
+                }
+                break;
+            case R.id.rad_ActStatusQueueing:
+                if (checked) {
+                    selectedActivity = Activity.QUEUEING;
+                }
+                break;
+            case R.id.rad_ActStatusWalking:
+                if (checked) {
+                    selectedActivity = Activity.WALKING;
+                }
+                break;
+        }
     }
 
+    //Controls to start/stop accelerometer
     public void startAccel(View view) {
 
     }
