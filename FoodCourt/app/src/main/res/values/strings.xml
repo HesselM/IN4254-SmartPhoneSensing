@@ -18,4 +18,10 @@
     <string name="data">data</string>
     <string name="tClassification">Classification:</string>
 
+    <!-- database -->
+    <string name="dbReset">Reset DB</string>
+    <string name="dbLastData">Last Record</string>
+    <string name="dbExport">Export DB</string>
+
+
 </resources>

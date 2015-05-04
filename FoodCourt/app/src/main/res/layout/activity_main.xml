@@ -76,11 +76,55 @@
 
     </LinearLayout>
 
+
     <TextView
         android:id="@+id/txt_Accel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/data"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_dbReset"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="dbReset"
+            android:text="@string/dbReset" />
+
+        <Button
+            android:id="@+id/btn_dbLastData"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="dbLastData"
+            android:text="@string/dbLastData" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_dbExport"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="dbExport"
+            android:text="@string/dbExport" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="wrap_content"

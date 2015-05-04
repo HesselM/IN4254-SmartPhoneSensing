@@ -69,6 +69,13 @@ public class dbHelper extends SQLiteOpenHelper {
         }
          */
     }
+    public void reset(SQLiteDatabase db){
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
+    }
+
+
+
 }
 
 

@@ -105,11 +105,28 @@ public class MainActivity extends ActionBarActivity {
         this.showAccelData();
     }
 
+    //db-actions from interface
+    public void dbReset(View view){
+        dbapi.reset();
+        accelerometer.setRun(0);
+        this.showAccelData();
+    }
+
+    public void dbLastData(View view){
+        this.showAccelData();
+    }
+
+    public void dbExport(View view){
+        dbapi.export();
+    }
+
+
+
     //test function to display data on screen from database
     public void showAccelData(){
         TextView txtAccel = (TextView) findViewById(R.id.txt_Accel);
         CharSequence text;
-        text = "max run:" + dbapi.getMaxRun() + "\n";
+        text = "max run:" + dbapi.getMaxRun() + "/" + accelerometer.getRun() + "\n";
         text = text + "records:" + dbapi.getRecordCount() + "\n";
         text = text + "motionType:" + selectedMotionType.getValue() + "\n";
         txtAccel.setText(text);

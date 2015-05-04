@@ -39,9 +39,9 @@ public class Accelerometer implements SensorEventListener {
     }
 
     //return run number
-    public int getRun(){
-        return run;
-    }
+    public int getRun(){ return run; }
+    public void setRun(int run){ this.run = run; }
+
 
     //start accelerometer
     public void start() {
