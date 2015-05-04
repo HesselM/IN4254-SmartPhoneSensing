@@ -1,6 +1,21 @@
 <resources>
     <string name="app_name">FoodCourt</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- 't' prefix: title, followed by ':' -->
+
+    <!-- Activity Types -->
+    <string name="tSelectActivity">Select Activity:</string>
+    <string name="walking">Walking</string>
+    <string name="queueing">Queueing</string>
+    <string name="idle">Idle</string>
+
+    <!-- Actions -->
+    <string name="accelStart">Start Accel</string>
+    <string name="accelStop">Stop Accel</string>
+
+    <!-- Misc -->
+    <string name="data">data</string>
+    <string name="tClassification">Classification:</string>
+
 </resources>
