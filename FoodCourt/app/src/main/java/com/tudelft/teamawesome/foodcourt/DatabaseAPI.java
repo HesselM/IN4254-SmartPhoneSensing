@@ -1,15 +1,10 @@
 package com.tudelft.teamawesome.foodcourt;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.io.BufferedWriter;
@@ -21,20 +16,23 @@ import java.util.Date;
 
 /**
  * Created by Electroozz on 04/05/15.
+ *
+ * API to access database. By using this API the SQL statements and database specific setttings will
+ *  be kept inside a specific part (API and Database) of the app, so the rest of the app can focus
+ *  on what is important there.
  */
-public class dbAPI {
-    private dbHelper helper;
+public class DatabaseAPI {
+    private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
-    private Context context;
-
+    private Context appContext;
 
     //init database
-    public dbAPI(Context context) {
-        this.context = context;
+    public DatabaseAPI(Context appContext) {
+        this.appContext = appContext;
         //create helper
-        helper = new dbHelper(context);
+        dbHelper = new DatabaseHelper(appContext);
         //open database
-        db = helper.getWritableDatabase();
+        db = dbHelper.getWritableDatabase();
     }
 
     //close database
@@ -44,17 +42,13 @@ public class dbAPI {
 
     //reset database
     public void reset() {
-        helper.reset(db);
+        dbHelper.reset(db);
     }
-
-
-
-
 
     //retrieve highest run-value in database
     public int getMaxRun() {
         int run = 0;
-        Cursor c = db.rawQuery("SELECT MAX(" + dbContract.AccelTable.COLUMN_NAME_RUN + ") as maxrun FROM " + dbContract.AccelTable.TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT MAX(" + DatabaseModel.TableAccel.COL_NAME_RUN + ") as maxrun FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             run = c.getInt(c.getColumnIndexOrThrow("maxrun"));
@@ -66,7 +60,7 @@ public class dbAPI {
     //retrieve number of records in the database
     public int getRecordCount() {
         int count = 0;
-        Cursor c = db.rawQuery("SELECT COUNT(*) as count FROM " + dbContract.AccelTable.TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT COUNT(*) as count FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             count = c.getInt(c.getColumnIndexOrThrow("count"));
@@ -76,8 +70,13 @@ public class dbAPI {
 
     }
 
+    //insert record of accelerometer readings.
+    public long insertAccel(RecordRawAccel record){
+        return this.insert(DatabaseModel.TableAccel.TAB_NAME, record.toContentValues());
+    }
+
     // Insert the new row, returning the primary key value of the new row
-    public long insert(String tablename, ContentValues values){
+    private long insert(String tablename, ContentValues values){
         return db.insert(tablename, null, values);
     }
 
@@ -92,26 +91,26 @@ public class dbAPI {
         Log.v("export", currentDateTimeString + "\n");
 
         //retrieve data
-        Cursor c = db.rawQuery("SELECT * FROM " + dbContract.AccelTable.TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT * FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
 
         //iterate over data
         appendLog("motiontype:Walking(3),Queueing(2),Idle(1)");
         appendLog("timestamp,run,accuracy,motiontype,x,y,z");
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             String text = "";
-            text = text + c.getLong(c.getColumnIndexOrThrow(dbContract.AccelTable.COLUMN_NAME_TIMESTAMP));
+            text = text + c.getLong(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_TIMESTAMP));
             text = text + ",";
-            text = text + c.getInt(c.getColumnIndexOrThrow(dbContract.AccelTable.COLUMN_NAME_RUN));
+            text = text + c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_RUN));
             text = text + ",";
-            text = text + c.getInt(c.getColumnIndexOrThrow(dbContract.AccelTable.COLUMN_NAME_ACCURACY));
+            text = text + c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_ACCURACY));
             text = text + ",";
-            text = text + c.getInt(c.getColumnIndexOrThrow(dbContract.AccelTable.COLUMN_NAME_MOTIONTYPE));
+            text = text + c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_MOTIONTYPE));
             text = text + ",";
-            text = text + c.getFloat(c.getColumnIndexOrThrow(dbContract.AccelTable.COLUMN_NAME_X));
+            text = text + c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_X));
             text = text + ",";
-            text = text + c.getFloat(c.getColumnIndexOrThrow(dbContract.AccelTable.COLUMN_NAME_Y));
+            text = text + c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_Y));
             text = text + ",";
-            text = text + c.getFloat(c.getColumnIndexOrThrow(dbContract.AccelTable.COLUMN_NAME_Z));
+            text = text + c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_Z));
             appendLog(text);
             Log.v("export", text + "\n");
         }
@@ -126,7 +125,7 @@ public class dbAPI {
         {
             try
             {
-                Toast toast = Toast.makeText(this.context, "created new log", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this.appContext, "created new log", Toast.LENGTH_SHORT);
                 toast.show();
                 logFile.createNewFile();
             }

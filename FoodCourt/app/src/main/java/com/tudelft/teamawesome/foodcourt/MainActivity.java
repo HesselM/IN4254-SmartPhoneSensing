@@ -1,7 +1,6 @@
 package com.tudelft.teamawesome.foodcourt;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,7 +20,7 @@ public class MainActivity extends ActionBarActivity {
     private Accelerometer accelerometer;
 
     // API for database
-    private dbAPI dbapi;
+    private DatabaseAPI dbAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +28,12 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //open db-API
-        dbapi = new dbAPI(this);
+        dbAPI = new DatabaseAPI(this);
 
         //setup Accelerometer
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = new Accelerometer(mSensorManager);
-        accelerometer.setDatabaseAPI(dbapi);
+        accelerometer.setDatabaseAPI(dbAPI);
 
         //setup initial values
         selectedMotionType = MotionType.IDLE;
@@ -107,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
 
     //db-actions from interface
     public void dbReset(View view){
-        dbapi.reset();
+        dbAPI.reset();
         accelerometer.setRun(0);
         this.showAccelData();
     }
@@ -117,7 +116,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void dbExport(View view){
-        dbapi.export();
+        dbAPI.export();
     }
 
 
@@ -126,8 +125,8 @@ public class MainActivity extends ActionBarActivity {
     public void showAccelData(){
         TextView txtAccel = (TextView) findViewById(R.id.txt_Accel);
         CharSequence text;
-        text = "max run:" + dbapi.getMaxRun() + "/" + accelerometer.getRun() + "\n";
-        text = text + "records:" + dbapi.getRecordCount() + "\n";
+        text = "max run:" + dbAPI.getMaxRun() + "/" + accelerometer.getRun() + "\n";
+        text = text + "records:" + dbAPI.getRecordCount() + "\n";
         text = text + "motionType:" + selectedMotionType.getValue() + "\n";
         txtAccel.setText(text);
     }
