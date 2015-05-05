@@ -112,14 +112,14 @@ public class DatabaseAPI {
             text = text + ",";
             text = text + c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_Z));
             appendLog(text);
-            Log.v("export", text + "\n");
+            //Log.v("export", text + "\n");
         }
         c.close();
     }
 
     public void appendLog(String text)
     {
-        File logFile = new File("sdcard/log" + currentDateTimeString + ".txt");
+        File logFile = new File("sdcard/log " + currentDateTimeString + ".txt");
 
         if (!logFile.exists())
         {

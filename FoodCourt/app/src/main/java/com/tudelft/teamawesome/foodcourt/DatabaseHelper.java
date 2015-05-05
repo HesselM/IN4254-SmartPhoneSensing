@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         DatabaseModel.TableAccel.COL_NAME_Y              + SPACE +
                             DatabaseModel.TableAccel.COL_TYPE_Y          + COMMA + SPACE +
                         DatabaseModel.TableAccel.COL_NAME_Z              + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_Z          + COMMA + SPACE +
+                            DatabaseModel.TableAccel.COL_TYPE_Z          +
                      " )";
 
     private static final String SQL_DELETE_ENTRIES =
