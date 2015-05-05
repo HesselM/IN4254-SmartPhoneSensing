@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -82,20 +83,20 @@ public class DatabaseAPI {
 
 
 /**********************************************/
-    private String currentDateTimeString;
+    private String logname;
 
     //export database
     public void export() {
         //create filename
-        currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-        Log.v("export", currentDateTimeString + "\n");
+        logname = "accelLog" + System.currentTimeMillis();
+        //Log.v("export", currentDateTimeString + "\n");
 
         //retrieve data
         Cursor c = db.rawQuery("SELECT * FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
 
         //iterate over data
-        appendLog("motiontype:Walking(3),Queueing(2),Idle(1)");
-        appendLog("timestamp,run,accuracy,motiontype,x,y,z");
+        //appendLog("motiontype:Walking(3),Queueing(2),Idle(1)");
+        //appendLog("timestamp,run,accuracy,motiontype,x,y,z");
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             String text = "";
             text = text + c.getLong(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_TIMESTAMP));
@@ -119,7 +120,7 @@ public class DatabaseAPI {
 
     public void appendLog(String text)
     {
-        File logFile = new File("sdcard/log " + currentDateTimeString + ".txt");
+        File logFile = new File("sdcard/" + logname + ".txt");
 
         if (!logFile.exists())
         {
