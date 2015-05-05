@@ -116,7 +116,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void dbExport(View view){
-        dbAPI.export();
+        dbAPI.exportAccelTable();
     }
 
 

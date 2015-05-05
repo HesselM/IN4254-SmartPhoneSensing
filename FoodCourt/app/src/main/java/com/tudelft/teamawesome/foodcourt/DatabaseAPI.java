@@ -86,17 +86,17 @@ public class DatabaseAPI {
     private String logname;
 
     //export database
-    public void export() {
+    public void exportAccelTable() {
         //create filename
         logname = "accelLog" + System.currentTimeMillis();
-        //Log.v("export", currentDateTimeString + "\n");
 
         //retrieve data
         Cursor c = db.rawQuery("SELECT * FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
 
+        //print column headers (same order as values!!)
+        appendLog("timestamp,run,accuracy,motiontype,x,y,z");
+
         //iterate over data
-        //appendLog("motiontype:Walking(3),Queueing(2),Idle(1)");
-        //appendLog("timestamp,run,accuracy,motiontype,x,y,z");
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             String text = "";
             text = text + c.getLong(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_TIMESTAMP));
