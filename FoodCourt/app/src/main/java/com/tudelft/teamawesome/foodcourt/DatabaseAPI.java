@@ -46,10 +46,23 @@ public class DatabaseAPI {
         dbHelper.reset(db);
     }
 
+    //reset Accelerometer Activity
+    public void resetAccelActivity() {
+        db.execSQL("DELETE FROM "+ DatabaseModel.TableAccelAct.TAB_NAME);
+    }
+
+
     //retrieve highest run-value in database
     public int getMaxRun() {
         int run = 0;
-        Cursor c = db.rawQuery("SELECT MAX(" + DatabaseModel.TableAccel.COL_NAME_RUN + ") as maxrun FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
+        
+        //setup query
+        String query = "";
+        query += "SELECT MAX(" + DatabaseModel.TableAccelAct.COL_NAME_RUN + ") as maxrun";
+        query += " FROM " + DatabaseModel.TableAccelAct.TAB_NAME;
+        
+        //send query to db
+        Cursor c = db.rawQuery(query, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             run = c.getInt(c.getColumnIndexOrThrow("maxrun"));
@@ -61,7 +74,14 @@ public class DatabaseAPI {
     //retrieve number of records in the database
     public int getRecordCount() {
         int count = 0;
-        Cursor c = db.rawQuery("SELECT COUNT(*) as count FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
+
+        //setup query
+        String query = "";
+        query += "SELECT COUNT(*) as count";
+        query += " FROM " + DatabaseModel.TableAccelAct.TAB_NAME;
+
+        //send query to db
+        Cursor c = db.rawQuery(query, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             count = c.getInt(c.getColumnIndexOrThrow("count"));
@@ -73,25 +93,50 @@ public class DatabaseAPI {
 
     //insert record of accelerometer readings.
     public long insertAccel(RecordRawAccel record){
-        return this.insert(DatabaseModel.TableAccel.TAB_NAME, record.toContentValues());
-    }
-
-    // Insert the new row, returning the primary key value of the new row
-    private long insert(String tablename, ContentValues values){
+        String tablename     = DatabaseModel.TableAccelAct.TAB_NAME;
+        ContentValues values = record.toContentValues();
         return db.insert(tablename, null, values);
     }
 
 
-/**********************************************/
+    /**********************************************/
+    /*              EXPORT FUNCTIONS              */
+    /**********************************************/
     private String logname;
 
-    //export database
-    public void exportAccelTable() {
+    
+    public void exportTableAccelBias() {
         //create filename
-        logname = "accelLog" + System.currentTimeMillis();
+        logname = "log_accelBias" + System.currentTimeMillis();
 
         //retrieve data
-        Cursor c = db.rawQuery("SELECT * FROM " + DatabaseModel.TableAccel.TAB_NAME, null);
+        Cursor c = db.rawQuery("SELECT * FROM " + DatabaseModel.TableAccelBias.TAB_NAME, null);
+
+        //print column headers (same order as values!!)
+        appendLog("x,y,z");
+
+        //iterate over data
+        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+            String text = "";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_X));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_Y));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_Z));
+            appendLog(text);
+            //Log.v("export", text + "\n");
+        }
+        c.close();
+    }
+    
+    
+    //export accelerometer activity
+    public void exportTableAccelAct() {
+        //create filename
+        logname = "log_accelActivity" + System.currentTimeMillis();
+
+        //retrieve data
+        Cursor c = db.rawQuery("SELECT * FROM " + DatabaseModel.TableAccelAct.TAB_NAME, null);
 
         //print column headers (same order as values!!)
         appendLog("timestamp,run,accuracy,motiontype,x,y,z");
@@ -99,19 +144,19 @@ public class DatabaseAPI {
         //iterate over data
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             String text = "";
-            text = text + c.getLong(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_TIMESTAMP));
-            text = text + ",";
-            text = text + c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_RUN));
-            text = text + ",";
-            text = text + c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_ACCURACY));
-            text = text + ",";
-            text = text + c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_MOTIONTYPE));
-            text = text + ",";
-            text = text + c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_X));
-            text = text + ",";
-            text = text + c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_Y));
-            text = text + ",";
-            text = text + c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccel.COL_NAME_Z));
+            text += c.getLong(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_TIMESTAMP));
+            text += ",";
+            text += c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_RUN));
+            text += ",";
+            text += c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_ACCURACY));
+            text += ",";
+            text += c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_MOTIONTYPE));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_X));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_Y));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_Z));
             appendLog(text);
             //Log.v("export", text + "\n");
         }
