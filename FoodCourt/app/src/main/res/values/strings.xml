@@ -13,6 +13,7 @@
     <!-- Actions -->
     <string name="accelStart">Start Accel</string>
     <string name="accelStop">Stop Accel</string>
+    <string name="accelCalibrate">Calibrate Accel</string>
 
     <!-- Misc -->
     <string name="data">data</string>

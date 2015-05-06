@@ -106,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
 
     //db-actions from interface
     public void dbReset(View view){
-        dbAPI.reset();
+        dbAPI.resetAccelActivity();
         accelerometer.setRun(0);
         this.showAccelData();
     }
@@ -116,7 +116,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void dbExport(View view){
-        dbAPI.exportAccelTable();
+        dbAPI.exportTableAccelAct();
+        dbAPI.exportTableAccelBias();
     }
 
 

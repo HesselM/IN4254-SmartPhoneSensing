@@ -1,6 +1,5 @@
 package com.tudelft.teamawesome.foodcourt;
 
-import android.content.ContentValues;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -63,11 +62,11 @@ public class Accelerometer implements SensorEventListener {
     public void onSensorChanged(SensorEvent event){
 
         // Create struct for accel readings.
-        RecordRawAccel record = new RecordRawAccel(this.run, event.timestamp, event.accuracy,
+        RecordAccelAct record = new RecordAccelAct(this.run, event.timestamp, event.accuracy,
                     this.motion.getValue(), event.values[0], event.values[1], event.values[2]);
 
         //insert data
-        dbAPI.insertAccel(record);
+        dbAPI.insertAccelAct(record);
     }
 
 

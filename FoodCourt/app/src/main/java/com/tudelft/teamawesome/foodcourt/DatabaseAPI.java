@@ -4,16 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * Created by Electroozz on 04/05/15.
@@ -91,12 +87,20 @@ public class DatabaseAPI {
 
     }
 
-    //insert record of accelerometer readings.
-    public long insertAccel(RecordRawAccel record){
+    //insert record of accelerometer readings for activity classification
+    public long insertAccelAct(RecordAccelAct record){
         String tablename     = DatabaseModel.TableAccelAct.TAB_NAME;
         ContentValues values = record.toContentValues();
         return db.insert(tablename, null, values);
     }
+
+    //insert record of accelerometer readings for bias estimation
+    public long insertAccelBias(RecordAccelBias record){
+        String tablename     = DatabaseModel.TableAccelBias.TAB_NAME;
+        ContentValues values = record.toContentValues();
+        return db.insert(tablename, null, values);
+    }
+
 
 
     /**********************************************/
