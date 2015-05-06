@@ -10,45 +10,59 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Opens the database and maintains the most important/low-level functions (create/upgrade/reset/etc)
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    /****** DB INFO ******/
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "FoodCourt.db";
-
     /****** SQL COMMANDS ******/
     private static final String COMMA = ",";
     private static final String SPACE = " ";
 
     // basic SQL-statements
-    private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + DatabaseModel.TableAccel.TAB_NAME +
+
+    //ACTIVITY
+    private static final String SQL_CREATE_TABLE_ACCELACT=
+            "CREATE TABLE " + DatabaseModel.TableAccelAct.TAB_NAME +
                     " (" +
-                        DatabaseModel.TableAccel._ID                     + SPACE +
-                            "INTEGER PRIMARY KEY"                        + COMMA + SPACE +
-                        DatabaseModel.TableAccel.COL_NAME_RUN            + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_RUN        + COMMA + SPACE +
-                        DatabaseModel.TableAccel.COL_NAME_TIMESTAMP      + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_TIMESTAMP  + COMMA + SPACE +
-                        DatabaseModel.TableAccel.COL_NAME_ACCURACY       + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_ACCURACY   + COMMA + SPACE +
-                        DatabaseModel.TableAccel.COL_NAME_MOTIONTYPE     + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_MOTIONTYPE + COMMA + SPACE +
-                        DatabaseModel.TableAccel.COL_NAME_X              + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_X          + COMMA + SPACE +
-                        DatabaseModel.TableAccel.COL_NAME_Y              + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_Y          + COMMA + SPACE +
-                        DatabaseModel.TableAccel.COL_NAME_Z              + SPACE +
-                            DatabaseModel.TableAccel.COL_TYPE_Z          +
+                        DatabaseModel.TableAccelAct._ID                     + SPACE +
+                            "INTEGER PRIMARY KEY"                           + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_RUN            + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_RUN        + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_TIMESTAMP      + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_TIMESTAMP  + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_ACCURACY       + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_ACCURACY   + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_MOTIONTYPE     + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_MOTIONTYPE + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_X              + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_X          + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_Y              + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_Y          + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_Z              + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_Z          +
                      " )";
 
-    private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + DatabaseModel.TableAccel.TAB_NAME;
+    private static final String SQL_DELETE_TABLE_ACCELACT =
+            "DROP TABLE IF EXISTS " + DatabaseModel.TableAccelAct.TAB_NAME;
 
+    //BIAS
+    private static final String SQL_CREATE_TABLE_ACCELBIAS =
+            "CREATE TABLE " + DatabaseModel.TableAccelBias.TAB_NAME +
+                    " (" +
+                        DatabaseModel.TableAccelBias._ID                    + SPACE +
+                            "INTEGER PRIMARY KEY"                           + COMMA + SPACE +
+                        DatabaseModel.TableAccelBias.COL_NAME_X             + SPACE +
+                            DatabaseModel.TableAccelBias.COL_TYPE_X         + COMMA + SPACE +
+                        DatabaseModel.TableAccelBias.COL_NAME_Y             + SPACE +
+                            DatabaseModel.TableAccelBias.COL_TYPE_Y         + COMMA + SPACE +
+                        DatabaseModel.TableAccelBias.COL_NAME_Z             + SPACE +
+                            DatabaseModel.TableAccelBias.COL_TYPE_Z         +
+                    " )";
+
+    private static final String SQL_DELETE_TABLE_ACCELBIAS =
+            "DROP TABLE IF EXISTS " + DatabaseModel.TableAccelBias.TAB_NAME;
 
     /****** FUNCTIONS ******/
 
     //Constructor
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DatabaseModel.DATABASE_NAME, null, DatabaseModel.DATABASE_VERSION);
     }
 
     // onCreate / onUpgrade
@@ -56,32 +70,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // If name is new, onCreate is called
     // When version is increased, onUpgrade is called
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_TABLE_ACCELACT);
+        db.execSQL(SQL_CREATE_TABLE_ACCELBIAS);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //TODO proper database upgrade mechanism
-        this.reset(db);
 
-        /*
+        //v1
+        // AccelAct-table
+        //v2
+        // upgrade of AccelAct-table
+        // --> recreate accelact table
+        //v3
+        // added AccelBias-table
+        // --> create accelbias table
+
         switch(oldVersion) {
-            case 1:
-                //upgrade logic from version 1 to 2
-            case 2:
-                //upgrade logic from version 2 to 3
-            case 3:
-                //upgrade logic from version 3 to 4
+            case 1: //upgrade logic from version 1 to 2
+                db.execSQL(SQL_DELETE_TABLE_ACCELACT);
+                db.execSQL(SQL_CREATE_TABLE_ACCELACT);
+            case 2: //upgrade logic from version 2 to 3
+                db.execSQL(SQL_CREATE_TABLE_ACCELBIAS);
+            case 3://upgrade logic from version 3 to 4
+            case 4://upgrade logic from version 4 to 5
+            case 5://upgrade logic from version 5 to 6
                 break;
             default:
                 throw new IllegalStateException(
                 "onUpgrade() with unknown newVersion" + newVersion);
         }
-         */
+
     }
 
     //reset database
     public void reset(SQLiteDatabase db){
-        db.execSQL(SQL_DELETE_ENTRIES);
+        db.execSQL(SQL_DELETE_TABLE_ACCELACT);
+        db.execSQL(SQL_DELETE_TABLE_ACCELBIAS);
         onCreate(db);
     }
 }
