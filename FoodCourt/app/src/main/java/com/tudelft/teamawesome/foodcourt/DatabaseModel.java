@@ -60,12 +60,16 @@ public class DatabaseModel {
         // Table structure:
         public static final String TAB_NAME              = "accelBias";
         public static final String COL_NAME_BIAS         = "bias";      //true/false if record is bias
+        public static final String COL_NAME_TIMESTAMP    = "timestamp";     // in nanoseconds
+        public static final String COL_NAME_ACCURACY     = "accuracy";
         public static final String COL_NAME_X            = "x";         //x-measurement/bias
         public static final String COL_NAME_Y            = "y";         //y-measurement/bias
         public static final String COL_NAME_Z            = "z";         //z-measurement/bias
 
         //Column types
         public static final String COL_TYPE_BIAS         = "INTEGER";   //boolean: 1 or 0
+        public static final String COL_TYPE_TIMESTAMP    = "INTEGER";   //long
+        public static final String COL_TYPE_ACCURACY     = "INTEGER";   //int
         public static final String COL_TYPE_X            = "REAL";      //float
         public static final String COL_TYPE_Y            = "REAL";      //float
         public static final String COL_TYPE_Z            = "REAL";      //float

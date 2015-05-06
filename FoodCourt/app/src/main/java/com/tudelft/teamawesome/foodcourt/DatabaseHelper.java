@@ -49,6 +49,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             "INTEGER PRIMARY KEY"                           + COMMA + SPACE +
                         DatabaseModel.TableAccelBias.COL_NAME_BIAS          + SPACE +
                             DatabaseModel.TableAccelBias.COL_TYPE_BIAS      + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_TIMESTAMP      + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_TIMESTAMP  + COMMA + SPACE +
+                        DatabaseModel.TableAccelAct.COL_NAME_ACCURACY       + SPACE +
+                            DatabaseModel.TableAccelAct.COL_TYPE_ACCURACY   + COMMA + SPACE +
                         DatabaseModel.TableAccelBias.COL_NAME_X             + SPACE +
                             DatabaseModel.TableAccelBias.COL_TYPE_X         + COMMA + SPACE +
                         DatabaseModel.TableAccelBias.COL_NAME_Y             + SPACE +
