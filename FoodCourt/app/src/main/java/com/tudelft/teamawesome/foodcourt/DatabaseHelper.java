@@ -90,14 +90,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //v3
         // added AccelBias-table
         // --> create accelbias table
+        // v4
+        // --> fix upgrade error
 
         switch(oldVersion) {
             case 1: //upgrade logic from version 1 to 2
-                db.execSQL(SQL_DELETE_TABLE_ACCELACT);
-                db.execSQL(SQL_CREATE_TABLE_ACCELACT);
             case 2: //upgrade logic from version 2 to 3
                 db.execSQL(SQL_CREATE_TABLE_ACCELBIAS);
             case 3://upgrade logic from version 3 to 4
+                db.execSQL(SQL_DELETE_TABLE_ACCELACT);
+                db.execSQL(SQL_CREATE_TABLE_ACCELACT);
             case 4://upgrade logic from version 4 to 5
             case 5://upgrade logic from version 5 to 6
                 break;

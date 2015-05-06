@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
  */
 public class DatabaseModel {
     /****** DB INFO ******/
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "FoodCourt.db";
 
     //empty constructor

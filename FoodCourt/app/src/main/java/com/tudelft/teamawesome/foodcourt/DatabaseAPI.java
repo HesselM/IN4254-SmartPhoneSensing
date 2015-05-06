@@ -47,6 +47,90 @@ public class DatabaseAPI {
         db.execSQL("DELETE FROM "+ DatabaseModel.TableAccelAct.TAB_NAME);
     }
 
+    //reset Accelerometer Activity
+    public void resetAccelBias() {
+        db.execSQL("DELETE FROM "+ DatabaseModel.TableAccelBias.TAB_NAME);
+    }
+
+    //calculate the bias for the accelerometer
+    // lowerBoud is the n-th sample from which the bias is stable and can be used
+    // This calculation uses the TableAccelBias table
+    public void calculateAccelBias(int lowerBound){
+        // select all records, which are not indicated as bias an sort on time.
+        String query = "";
+        query += "SELECT * ";
+        query += " FROM " + DatabaseModel.TableAccelBias.TAB_NAME;
+        query += " WHERE " + DatabaseModel.TableAccelBias.COL_NAME_BIAS + " = 0 ";
+        query += " ORDER BY " + DatabaseModel.TableAccelBias.COL_NAME_TIMESTAMP + " ASC";
+
+        //send query to db and iterate over all values
+        Cursor c = db.rawQuery(query, null);
+
+        //check if there are enough records
+        if (c.getCount() < lowerBound) {
+            Toast toast = Toast.makeText(this.appContext, "lowerbound < #records", Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+
+            //iterate over data
+            for (c.moveToPosition(lowerBound); !c.isAfterLast(); c.moveToNext()) {
+                x += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_X));
+                y += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Y));
+                z += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Z));
+            }
+
+            //normalize
+            int records = c.getCount() - lowerBound;
+            x = x / records;
+            y = y / records;
+            z = z / records;
+
+            //store data (convert milliseconds to nano to be consistent with data)
+            RecordAccelBias record = new RecordAccelBias(1,System.currentTimeMillis()*1000000,-1,x,y,z);
+            this.insertAccelBias(record);
+
+            String msg = "AccelBias: ";
+            msg += "x:" + x + " ";
+            msg += "y:" + y + " ";
+            msg += "z:" + z + " ";
+
+            Toast toast = Toast.makeText(this.appContext, msg, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        c.close();
+
+    }
+
+    public float[] getAccelBias(){
+        float[] bias = {0.0f, 0.0f, 0.0f};
+
+        // select all records, which are indicated as bias an sort on time.
+        String query = "";
+        query += "SELECT * ";
+        query += " FROM " + DatabaseModel.TableAccelBias.TAB_NAME;
+        query += " WHERE " + DatabaseModel.TableAccelBias.COL_NAME_BIAS + " = 1 ";
+        query += " ORDER BY " + DatabaseModel.TableAccelBias.COL_NAME_TIMESTAMP + " ASC";
+
+        //send query to db and iterate over all values
+        Cursor c = db.rawQuery(query, null);
+
+        //check if there are enough records
+        if (c.getCount() < 1) {
+            Toast toast = Toast.makeText(this.appContext, "No bias found! please calibrate accel", Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            c.moveToFirst();
+            bias[0] = c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_X));
+            bias[1] = c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Y));
+            bias[2] = c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Z));
+        }
+
+        return bias;
+    }
+
 
     //retrieve highest run-value in database
     public int getMaxRun() {
@@ -117,16 +201,22 @@ public class DatabaseAPI {
         Cursor c = db.rawQuery("SELECT * FROM " + DatabaseModel.TableAccelBias.TAB_NAME, null);
 
         //print column headers (same order as values!!)
-        appendLog("x,y,z");
+        appendLog("bias,timestamp,accuracy,x,y,z");
 
         //iterate over data
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             String text = "";
-            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_X));
+            text += c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_BIAS));
             text += ",";
-            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_Y));
+            text += c.getLong(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_TIMESTAMP));
             text += ",";
-            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelAct.COL_NAME_Z));
+            text += c.getInt(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_ACCURACY));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_X));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Y));
+            text += ",";
+            text += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Z));
             appendLog(text);
             //Log.v("export", text + "\n");
         }

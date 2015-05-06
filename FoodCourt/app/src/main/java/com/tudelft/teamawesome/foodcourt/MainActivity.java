@@ -28,11 +28,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //open db-API
-        dbAPI = new DatabaseAPI(this);
+        dbAPI = new DatabaseAPI(getApplicationContext());
 
         //setup Accelerometer
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = new Accelerometer(mSensorManager);
+        accelerometer = new Accelerometer(mSensorManager, getApplicationContext());
         accelerometer.setDatabaseAPI(dbAPI);
 
         //setup initial values
@@ -93,13 +93,18 @@ public class MainActivity extends ActionBarActivity {
         accelerometer.onMotionTypeChange(selectedMotionType);
     }
 
+    //Request to calibrate acceleromeetr
+    public void accelCalibrate(View view){
+        accelerometer.doCalibration();
+    }
+
     //Controls to start/stop accelerometer
-    public void startAccel(View view) {
+    public void accelStart(View view) {
         accelerometer.start();
         this.showAccelData();
     }
 
-    public void stopAccel(View view) {
+    public void accelStop(View view) {
         accelerometer.stop();
         this.showAccelData();
     }
