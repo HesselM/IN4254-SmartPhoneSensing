@@ -51,6 +51,15 @@
                 android:text="@string/walking"
                 android:onClick="activityChanged"/>
 
+            <!--
+            <RadioButton
+                android:id="@+id/rad_ActStatusQueueing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content
+                android:text="@string/queueing"
+                android:onClick="activityChanged"/>
+                -->
+
             <RadioButton
                 android:id="@+id/rad_ActStatusQueueStep"
                 android:layout_weight=".33"
