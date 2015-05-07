@@ -28,38 +28,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/txt_tSelectActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tSelectActivity"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
         <RadioGroup
             android:id="@+id/radGroup_ActStatus"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp">
+            android:orientation='horizontal'>
 
             <RadioButton
                 android:id="@+id/rad_ActStatusWalking"
-                android:layout_width="wrap_content"
+                android:layout_weight=".33"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/walking"
                 android:onClick="activityChanged"/>
 
             <RadioButton
-                android:id="@+id/rad_ActStatusQueueing"
-                android:layout_width="wrap_content"
+                android:id="@+id/rad_ActStatusQueueStep"
+                android:layout_weight=".33"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/queueing"
+                android:text="@string/queueStep"
                 android:onClick="activityChanged"/>
 
             <RadioButton
                 android:id="@+id/rad_ActStatusIdle"
-                android:layout_width="wrap_content"
+                android:layout_weight=".33"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/idle"
                 android:checked="true"

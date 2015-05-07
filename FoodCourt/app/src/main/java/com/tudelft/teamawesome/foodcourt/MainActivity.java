@@ -82,6 +82,11 @@ public class MainActivity extends ActionBarActivity {
                     selectedMotionType = MotionType.QUEUEING;
                 }
                 break;
+            case R.id.rad_ActStatusQueueStep:
+                if (checked) {
+                    selectedMotionType = MotionType.QUEUESTEP;
+                }
+                break;
             case R.id.rad_ActStatusWalking:
                 if (checked) {
                     selectedMotionType = MotionType.WALKING;

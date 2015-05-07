@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * Created by Electroozz on 04/05/15.
  *
- * API to access database. By using this API the SQL statements and database specific setttings will
+ * API to access database. By using this API the SQL statements and database specific settings will
  *  be kept inside a specific part (API and Database) of the app, so the rest of the app can focus
  *  on what is important there.
  */
@@ -55,7 +55,9 @@ public class DatabaseAPI {
     //calculate the bias for the accelerometer
     // lowerBoud is the n-th sample from which the bias is stable and can be used
     // This calculation uses the TableAccelBias table
-    public void calculateAccelBias(int lowerBound){
+    public float[] calculateAccelBias(int lowerBound){
+        float[] bias = {0.0f, 0.0f, 0.0f};
+
         // select all records, which are not indicated as bias an sort on time.
         String query = "";
         query += "SELECT * ";
@@ -71,37 +73,39 @@ public class DatabaseAPI {
             Toast toast = Toast.makeText(this.appContext, "lowerbound < #records", Toast.LENGTH_SHORT);
             toast.show();
         } else {
-            float x = 0.0f;
-            float y = 0.0f;
-            float z = 0.0f;
-
             //iterate over data
             for (c.moveToPosition(lowerBound); !c.isAfterLast(); c.moveToNext()) {
-                x += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_X));
-                y += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Y));
-                z += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Z));
+                bias[0] += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_X));
+                bias[1] += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Y));
+                bias[2] += c.getFloat(c.getColumnIndexOrThrow(DatabaseModel.TableAccelBias.COL_NAME_Z));
             }
 
             //normalize
             int records = c.getCount() - lowerBound;
-            x = x / records;
-            y = y / records;
-            z = z / records;
+            bias[0] = bias[0] / records;
+            bias[1] = bias[1] / records;
+            bias[2] = bias[2] / records;
 
             //store data (convert milliseconds to nano to be consistent with data)
-            RecordAccelBias record = new RecordAccelBias(1,System.currentTimeMillis()*1000000,-1,x,y,z);
+            RecordAccelBias record = new RecordAccelBias(
+                                                    1,                                  //record is bias, not data!
+                                                    System.currentTimeMillis()*1000000, //creation time in ns
+                                                    -1,                                 //no accuracy
+                                                    bias[0],bias[1],bias[2]);           //x/y/z values
             this.insertAccelBias(record);
 
             String msg = "AccelBias: ";
-            msg += "x:" + x + " ";
-            msg += "y:" + y + " ";
-            msg += "z:" + z + " ";
+            msg += "x:" + bias[0] + " ";
+            msg += "y:" + bias[1] + " ";
+            msg += "z:" + bias[2] + " ";
 
             Toast toast = Toast.makeText(this.appContext, msg, Toast.LENGTH_SHORT);
             toast.show();
         }
         c.close();
 
+        //return calculated bias
+        return bias;
     }
 
     public float[] getAccelBias(){

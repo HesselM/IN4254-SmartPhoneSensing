@@ -110,14 +110,10 @@ public class Accelerometer implements SensorEventListener {
             //check if we where calibrating
             if (calibrate) {
                 //calculate bias..
-                dbAPI.calculateAccelBias(collectedSamples_lowerBound);
+                accelBias = dbAPI.calculateAccelBias(collectedSamples_lowerBound);
 
                 //calibration is done
                 calibrate = false;
-
-                //message user we are done
-                //Toast toast = Toast.makeText(this.appContext, "Calibration is done", Toast.LENGTH_SHORT);
-                //toast.show();
             }
 
         }
