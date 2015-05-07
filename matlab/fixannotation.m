@@ -74,15 +74,21 @@ std_step = 0;
 maxidx = size(arr_magnitude_run,1) - wsize;
 if (maxidx > 1)
     for idx=1:maxidx
+        %determine motiontype which occures the most in the sampled window
+        data_window = arr_motion_run(idx:idx+wsize);
+        [h,x] = hist(data_window, unique(data_window));
+        mostType = x(h==max(h));
+        mostType = mostType(1); %choose first item when even.
+        
         %calculate deviation over wsize samples
         % and store deviation in correct array (walk/idle/step)
-        if (arr_motion_run(idx) == 1) %idle
+        if (mostType == 1) %idle
             std_idle(end+1) = std(arr_magnitude_run(idx:idx+wsize));
         end
-        if (arr_motion_run(idx) == 3) %walk
+        if (mostType == 3) %walk
             std_walk(end+1) = std(arr_magnitude_run(idx:idx+wsize));
         end
-        if (arr_motion_run(idx) == 4) %step
+        if (mostType == 4) %step
             std_step(end+1) = std(arr_magnitude_run(idx:idx+wsize));
         end
     end
