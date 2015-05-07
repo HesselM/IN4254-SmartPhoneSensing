@@ -1,0 +1,172 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_AccelCalibrate"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="accelCalibrate"
+            android:text="@string/accelCalibrate" />
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_tSelectActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tSelectActivity"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <RadioGroup
+            android:id="@+id/radGroup_ActStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp">
+
+            <RadioButton
+                android:id="@+id/rad_ActStatusWalking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/walking"
+                android:onClick="activityChanged"/>
+
+            <RadioButton
+                android:id="@+id/rad_ActStatusQueueing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/queueing"
+                android:onClick="activityChanged"/>
+
+            <RadioButton
+                android:id="@+id/rad_ActStatusIdle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/idle"
+                android:checked="true"
+                android:onClick="activityChanged"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_AccelStart"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="accelStart"
+            android:text="@string/accelStart" />
+
+        <Button
+            android:id="@+id/btn_AccelStop"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="accelStop"
+            android:text="@string/accelStop" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/txt_Accel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/data"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_dbReset"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="dbReset"
+            android:text="@string/dbReset" />
+
+        <Button
+            android:id="@+id/btn_dbLastData"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="dbLastData"
+            android:text="@string/dbLastData" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_dbExport"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="dbExport"
+            android:text="@string/dbExport" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#000000" />
+
+    <TextView
+        android:id="@+id/txt_tClassification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tClassification"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
+        android:id="@+id/txt_Classification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/data"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#000000" />
+
+
+</LinearLayout>
