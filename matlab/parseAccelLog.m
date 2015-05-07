@@ -10,7 +10,6 @@
 % where:
 % -> motiontype: Walking(3), Queueing(2), Idle(1)
 
-file =  'accelLog1430829445327.txt';
 
 if exist(file, 'file')
     sysvector = tdfread(file, ',');
