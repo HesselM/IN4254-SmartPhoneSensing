@@ -60,10 +60,43 @@ plot(motiontype_walk);
 legend('walk magnitude','motiontype');
 title('magnitude of walking');
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CALCUTE AUTOCORRELATION 
 %
+% m = samplenumber;
+%  t = lag;
+%  k = 0;
+
+magLength = length(magnitudeWalk);
+x_max = 0;
+y = [0 0 0 ];
+
+for m=101:300
+    
+    for t = 60:10:100
+       x = auto_cor(magnitudeWalk,m,t);
+        %search for the max (period hit) of each run
+       if x > x_max
+           x_max = x;
+           %display(x_max); 
+       end       
+    end
+    y(m) = x_max;
+    x_max = 0;
+end
+
+%delete all zero entrees, prototyping all samples takes too long
+y(y==0) = [];
+
+disp(y);
+
+%can this be bigger than 1???
+disp(max(y));
+
+%create histogram 
+y = round(y * 10);
+
+[std_walk_h , std_walk_x]   =  hist(std_walk,unique(std_walk));
 
 
-
+    
