@@ -25,15 +25,17 @@ accuracy    = sysvector.accuracy;
 motiontype  = sysvector.motiontype;
 accel       = [sysvector.x, sysvector.y, sysvector.z];
 
+%{
 %remove first 1000 measurements which contains noise due too filter stabilization
 if (size(timestamps,1) > 1000)
-timestamps = timestamps(1000:end,:);
+    timestamps = timestamps(1000:end,:);
     run = run(1000:end,:);
     accuracy = accuracy(1000:end,:);
     motiontype = motiontype(1000:end,:);
     accel = accel(1000:end,:);
 end
-
+%}
+    
 % calculate magnitude
 magnitude   = sqrt(sum(accel.^2, 2));
 
@@ -54,27 +56,31 @@ title('raw accel data ({m/s^2})', 'FontWeight','bold')
 
 % matlab does not has a round-operation to 0.1 digits (as done in the paper)
 % hence: multiply magnitude with 10, cast to in, and calculate pdf;
-mag10_idle    = round(magnitude(motiontype==1)*10);
-mag10_queue   = round(magnitude(motiontype==2)*10);
-mag10_walking = round(magnitude(motiontype==3)*10);
+mag10_idle  = round(magnitude(motiontype==1)*10);
+mag10_queue = round(magnitude(motiontype==2)*10);
+mag10_walk  = round(magnitude(motiontype==3)*10);
+mag10_qstep = round(magnitude(motiontype==4)*10);
 
 %calculate histogram
 [mag10_idle_h,mag10_idle_x] = hist(mag10_idle,unique(mag10_idle));
 [mag10_walk_h,mag10_walk_x] = hist(mag10_walking,unique(mag10_walking));
 [mag10_queue_h,mag10_queue_x] = hist(mag10_queue,unique(mag10_queue));
+[mag10_qstep_h,mag10_qstep_x] = hist(mag10_qstep,unique(mag10_qstep));
 
 %normalize histogram
 mag10_idle_h  = mag10_idle_h  ./ sum(mag10_idle_h);
 mag10_walk_h  = mag10_walk_h  ./ sum(mag10_walk_h);
 mag10_queue_h = mag10_queue_h ./ sum(mag10_queue_h);
+mag10_qstep_h = mag10_qstep_h ./ sum(mag10_qstep_h);
 
 figure(2)
 clf
 hold on
-plot(mag10_idle_x/10, mag10_idle_h, 'Color',[1,0,0]);
-plot(mag10_walk_x/10, mag10_walk_h, 'Color',[0,1,0]);
+plot( mag10_idle_x/10, mag10_idle_h,  'Color',[1,0,0]);
+plot( mag10_walk_x/10, mag10_walk_h,  'Color',[0,1,0]);
 plot(mag10_queue_x/10, mag10_queue_h, 'Color',[0,0,1]);
-legend('idle','walk','queue');
+plot(mag10_qstep_x/10, mag10_qstep_h, 'Color',[0,1,1]);
+legend('idle','walk','queue', 'qstep');
 title('pdf of raw accel data ({m/s^2})', 'FontWeight','bold')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -96,6 +102,7 @@ maxrun = max(run);
 std_idle  = 0; 
 std_queue = 0;
 std_walk  = 0;
+std_qstep = 0;
 
 % for each run
 for r=minrun:maxrun
@@ -121,6 +128,9 @@ for r=minrun:maxrun
             if (mt(idx) == 3) %walking
                 std_walk(end+1) = std(mag(idx:idx+50));
             end
+            if (mt(idx) == 4) %queuestep
+                std_qstep(end+1) = std(mag(idx:idx+50));
+            end
 
         end
     end
@@ -129,24 +139,28 @@ end
 std_idle  = round(std_idle*10);
 std_queue = round(std_queue*10);
 std_walk  = round(std_walk*10);
+std_qstep = round(std_qstep*10);
 
 %calculate histogram
 [std_idle_h,std_idle_x]   = hist(std_idle,unique(std_idle));
 [std_queue_h,std_queue_x] = hist(std_queue,unique(std_queue));
 [std_walk_h,std_walk_x]   = hist(std_walk,unique(std_walk));
+[std_qstep_h,std_qstep_x] = hist(std_qstep,unique(std_qstep));
 
 %normalize histogram
 std_idle_h  = std_idle_h  ./ sum(std_idle_h);
 std_queue_h = std_queue_h ./ sum(std_queue_h);
 std_walk_h  = std_walk_h  ./ sum(std_walk_h);
+std_qstep_h = std_qstep_h ./ sum(std_qstep_h);
 
 figure(3)
 clf
 hold on
-plot(std_idle_x/10, std_idle_h, 'Color',[1,0,0]);
-plot(std_walk_x/10, std_walk_h, 'Color',[0,1,0]);
+plot( std_idle_x/10, std_idle_h,  'Color',[1,0,0]);
+plot( std_walk_x/10, std_walk_h,  'Color',[0,1,0]);
 plot(std_queue_x/10, std_queue_h, 'Color',[0,0,1]);
-legend('idle','walk','queue');
+plot(std_qstep_x/10, std_qstep_h, 'COlor',[0,1,1]);
+legend('idle','walk','queue', 'qstep');
 title('pdf std id raw accel data ({m/s^2})', 'FontWeight','bold')
 
 
