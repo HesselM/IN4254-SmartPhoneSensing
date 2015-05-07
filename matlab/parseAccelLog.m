@@ -14,11 +14,22 @@ else
     disp(['file: ' file ' does not exist' char(10)]);
 end
 
+
+
 timestamps  = sysvector.timestamp;
 run         = sysvector.run;
 accuracy    = sysvector.accuracy;
 motiontype  = sysvector.motiontype;
 accel       = [sysvector.x, sysvector.y, sysvector.z];
+
+%remove first 1000 measurements which contains noise due too filter stabilization
+if (size(timestamps,1) > 1000)
+timestamps = timestamps(1000:end,:);
+    run = run(1000:end,:);
+    accuracy = accuracy(1000:end,:);
+    motiontype = motiontype(1000:end,:);
+    accel = accel(1000:end,:);
+end
 
 % calculate magnitude
 magnitude   = sqrt(sum(accel.^2, 2));
