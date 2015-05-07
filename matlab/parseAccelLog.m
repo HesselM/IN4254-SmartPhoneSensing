@@ -18,10 +18,13 @@ else
     return
 end
 
-
-if ~exist('windowsize', 'var')
-    windowsize = 50;
+% if 'windowsize' is not set, set it to 50
+tmp = 50;
+if exist('windowsize', 'var')
+    tmp = windowsize;
 end
+windowsize = tmp;
+
 
 timestamps  = sysvector.timestamp;
 run         = sysvector.run;
@@ -120,22 +123,23 @@ for r=minrun:maxrun
     maxidx = size(mag,1) - windowsize;
     if (maxidx > 1)
         for idx=1:maxidx
+            %determine motiontype which occures the most in the sampled window
+            data_window = mt(idx:idx+windowsize);
+            [h,x] = hist(data_window, unique(data_window));
+            mostType = x(h==max(h));
+            mostType = mostType(1); %choose first item when even.
 
-            %calculate deviation over 1s (50sample) window
-            % and store deviation in correct array (walk/idle)
-            if (mt(idx) == 1) %idle
+            %calculate deviation over wsize samples
+            % and store deviation in correct array (walk/idle/step)
+            if (mostType == 1) %idle
                 std_idle(end+1) = std(mag(idx:idx+windowsize));
             end
-            if (mt(idx) == 2) %queue
-                std_queue(end+1) = std(mag(idx:idx+windowsize));
-            end
-            if (mt(idx) == 3) %walking
+            if (mostType == 3) %walk
                 std_walk(end+1) = std(mag(idx:idx+windowsize));
             end
-            if (mt(idx) == 4) %queuestep
+            if (mostType == 4) %step
                 std_qstep(end+1) = std(mag(idx:idx+windowsize));
             end
-
         end
     end
 end
