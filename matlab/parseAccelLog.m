@@ -15,9 +15,13 @@ if exist(file, 'file')
     sysvector = tdfread(file, ',');
 else 
     disp(['file: ' file ' does not exist' char(10)]);
+    return
 end
 
 
+if ~exist('windowsize', 'var')
+    windowsize = 50;
+end
 
 timestamps  = sysvector.timestamp;
 run         = sysvector.run;
@@ -63,7 +67,7 @@ mag10_qstep = round(magnitude(motiontype==4)*10);
 
 %calculate histogram
 [mag10_idle_h,mag10_idle_x] = hist(mag10_idle,unique(mag10_idle));
-[mag10_walk_h,mag10_walk_x] = hist(mag10_walking,unique(mag10_walking));
+[mag10_walk_h,mag10_walk_x] = hist(mag10_walk,unique(mag10_walk));
 [mag10_queue_h,mag10_queue_x] = hist(mag10_queue,unique(mag10_queue));
 [mag10_qstep_h,mag10_qstep_x] = hist(mag10_qstep,unique(mag10_qstep));
 
@@ -113,23 +117,23 @@ for r=minrun:maxrun
 
     % check if there are at least 50 samples 
     % ASSUMPTION: all 50 samples have an equal motiontype!!
-    maxidx = size(mag,1) - 50;
+    maxidx = size(mag,1) - windowsize;
     if (maxidx > 1)
         for idx=1:maxidx
 
             %calculate deviation over 1s (50sample) window
             % and store deviation in correct array (walk/idle)
             if (mt(idx) == 1) %idle
-                std_idle(end+1) = std(mag(idx:idx+50));
+                std_idle(end+1) = std(mag(idx:idx+windowsize));
             end
             if (mt(idx) == 2) %queue
-                std_queue(end+1) = std(mag(idx:idx+50));
+                std_queue(end+1) = std(mag(idx:idx+windowsize));
             end
             if (mt(idx) == 3) %walking
-                std_walk(end+1) = std(mag(idx:idx+50));
+                std_walk(end+1) = std(mag(idx:idx+windowsize));
             end
             if (mt(idx) == 4) %queuestep
-                std_qstep(end+1) = std(mag(idx:idx+50));
+                std_qstep(end+1) = std(mag(idx:idx+windowsize));
             end
 
         end
@@ -159,7 +163,7 @@ hold on
 plot( std_idle_x/10, std_idle_h,  'Color',[1,0,0]);
 plot( std_walk_x/10, std_walk_h,  'Color',[0,1,0]);
 plot(std_queue_x/10, std_queue_h, 'Color',[0,0,1]);
-plot(std_qstep_x/10, std_qstep_h, 'COlor',[0,1,1]);
+plot(std_qstep_x/10, std_qstep_h, 'Color',[0,1,1]);
 legend('idle','walk','queue', 'qstep');
 title('pdf std id raw accel data ({m/s^2})', 'FontWeight','bold')
 
