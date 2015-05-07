@@ -23,24 +23,33 @@ public class Accelerometer implements SensorEventListener {
     private int collectedSamples = 0;       // number of collected samples in a run
 
     //flags to determine operation of accelerometer
-    private boolean listening = false;
-    private boolean calibrate = false;
-    private boolean logdata   = false;
+    private boolean listening  = false;  //indicates if we are already listening to the accel
+    private boolean calibrate  = false;  //indicates if we are collecting data for calibration
+    private boolean logdata    = false;  //indicates if we need to log/store the accel-data
+    private boolean filterDone = false;  //indicates if the accel-filter has reached a steady state
 
-    //globals
+    //track run-number and accelBias
+    protected int run = 0;
+    protected float[] accelBias = {0.0f, 0.0f, 0.0f};
+
+    //misc globals
     protected SensorManager sm;
     protected Sensor sensor;
-    protected int run;
     protected MotionType motion;
     protected DatabaseAPI dbAPI;
     protected Context appContext;
-    protected float[] accelBias = {0.0f, 0.0f, 0.0f};
 
     public Accelerometer(SensorManager sm, Context appContext){
         this.appContext = appContext;
         this.sm = sm;
+
+        //init accelerometer
         sensor = sm.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        run = 0;
+
+        //start running accelerometer.
+        // Due too some filtering in TYPE_LINEAR_ACCELERATION it takes
+        //   roughly 1000 samples to reach a steady state, hence we start it on initialization.
+        this.startAccel(false, false);
     }
 
     //set database acces
@@ -76,11 +85,18 @@ public class Accelerometer implements SensorEventListener {
 
     //start accelerometer for retrieving data for classification
     public void start() {
-        //new run
-        run = run + 1;
+        //only start if accel-filter has reached a steady state
+        if (filterDone) {
+            //new run
+            run = run + 1;
 
-        //set flags: data needs to be logged and system is not doing calibration
-        this.startAccel(true, false);
+            //set flags: data needs to be logged and system is not doing calibration
+            this.startAccel(true, false);
+        } else {
+            //message user has to wait for filter to reach steady state
+            Toast toast = Toast.makeText(this.appContext, "Accel still booting up", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     //start accelerometer
@@ -92,8 +108,10 @@ public class Accelerometer implements SensorEventListener {
         this.collectedSamples = 0;
 
         //start listening
-        if (sm.registerListener(this, sensor, samplingPeriodUs)){
-            listening = true; // we are listening to accelerometer!
+        if (!listening) {
+            if (sm.registerListener(this, sensor, samplingPeriodUs)) {
+                listening = true; // we are listening to accelerometer!
+            }
         }
     }
 
@@ -104,21 +122,10 @@ public class Accelerometer implements SensorEventListener {
             sm.unregisterListener(this);
 
             //reset flags
-            listening = false;
-            logdata   = false;
-
-            //check if we where calibrating
-            if (calibrate) {
-                //calculate bias..
-                accelBias = dbAPI.calculateAccelBias(collectedSamples_lowerBound);
-
-                //calibration is done
-                calibrate = false;
-            }
-
+            listening  = false;
+            logdata    = false;
+            filterDone = false;
         }
-
-
     }
 
     @Override
@@ -128,10 +135,16 @@ public class Accelerometer implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event){
-        if (logdata) {
-            //new sample collected
-            this.collectedSamples++;
+        //new sample collected
+        this.collectedSamples++;
 
+        //check if we have collected enough so the filter has reached a steady state
+        if (this.collectedSamples > this.collectedSamples_lowerBound) {
+            filterDone = true;
+        }
+
+        //Check if data logging is enabled.
+        if (logdata) {
             if (calibrate) {
                 // Create struct for accel readings.
                 RecordAccelBias record = new RecordAccelBias(0, event.timestamp, event.accuracy,
@@ -141,8 +154,14 @@ public class Accelerometer implements SensorEventListener {
                 dbAPI.insertAccelBias(record);
 
                 //check if we reached our upperbound
+                // if, stop and do calibration
                 if (this.collectedSamples >= collectedSamples_upperBound){
+                    //stop/unregister accelerometer
                     this.stop();
+                    //calculate bias..
+                    accelBias = dbAPI.calculateAccelBias(collectedSamples_lowerBound);
+                    //signal that calibration is done
+                    calibrate = false;
                 }
 
             } else {
