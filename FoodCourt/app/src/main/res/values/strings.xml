@@ -23,7 +23,8 @@
     <!-- database -->
     <string name="dbReset">Reset DB</string>
     <string name="dbLastData">Last Record</string>
-    <string name="dbExport">Export DB</string>
+    <string name="accelExportAct">Export Activity</string>
+    <string name="accelExportBias">Export Bias</string>
 
 
 </resources>

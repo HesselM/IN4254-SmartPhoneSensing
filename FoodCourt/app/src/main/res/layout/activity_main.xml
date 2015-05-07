@@ -17,6 +17,15 @@
             android:layout_height="wrap_content"
             android:onClick="accelCalibrate"
             android:text="@string/accelCalibrate" />
+
+        <Button
+            android:id="@+id/btn_AccelExportBias"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="accelExportBias"
+            android:text="@string/accelExportBias" />
+
     </LinearLayout>
 
 
@@ -150,12 +159,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_dbExport"
+            android:id="@+id/btn_AccelExportAct"
             android:layout_weight=".5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="dbExport"
-            android:text="@string/dbExport" />
+            android:onClick="accelExportAct"
+            android:text="@string/accelExportAct" />
 
     </LinearLayout>
 

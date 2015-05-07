@@ -127,11 +127,13 @@ public class MainActivity extends ActionBarActivity {
         this.showAccelData();
     }
 
-    public void dbExport(View view){
-        dbAPI.exportTableAccelAct();
+    public void accelExportBias(View view){
         dbAPI.exportTableAccelBias();
     }
 
+    public void accelExportAct(View view){
+        dbAPI.exportTableAccelAct();
+    }
 
 
     //test function to display data on screen from database
