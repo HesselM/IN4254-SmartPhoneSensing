@@ -1,0 +1,57 @@
+% autocorrelation test
+% J.Miog
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% READ SAMPLES
+%
+%
+%%%
+
+
+if exist(file, 'file')
+    sysvector = tdfread(file, ',');
+else 
+    disp(['file: ' file ' does not exist' char(10)]);
+end
+
+timestamps  = sysvector.timestamp;
+run         = sysvector.run;
+accuracy    = sysvector.accuracy;
+motiontype  = sysvector.motiontype;
+accel       = [sysvector.x, sysvector.y, sysvector.z];
+
+%remove first 1000 measurements which contains noise due too filter stabilization
+if (size(timestamps,1) > 1000)
+timestamps = timestamps(1000:end,:);
+    run = run(1000:end,:);
+    accuracy = accuracy(1000:end,:);
+    motiontype = motiontype(1000:end,:);
+    accel = accel(1000:end,:);
+end
+
+% calculate magnitude
+magnitude   = sqrt(sum(accel.^2, 2));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RAW DATA PLOT OF WALKING
+
+%select magnitude data out when its walking
+
+accel_walk = accel(motiontype==3,:);
+
+magnitudeWalk = sqrt(sum(accel_walk.^2,2));
+
+%plot this data
+figure(1)
+clf
+hold on
+plot(accel_walk);
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CALCUTE AUTOCORRELATION 
+%
+
+
