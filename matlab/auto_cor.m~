@@ -1,6 +1,7 @@
 function x = auto_cor(sign,m,t)	
+    y = 0;
 	for k = 0:t-1
-		x = x + (sign(m+k) *  mad(sign(m-t:t)))*(sign(m+k+t)-mad(sign(m:m+t)));
+		y = y + (sign(m+k)-mean(sign(m:m+t)))*(sign(m+k+t)-mean(sign(m+t:m+t)));
 	end  
-   x = x  / t*std(sign(m-t:t)*std(sign(t:m+t);
+     x = y / t*std(sign(m-t:m))* std(sign(m:m+t));
 end

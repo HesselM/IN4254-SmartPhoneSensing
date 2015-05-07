@@ -21,7 +21,7 @@ accel       = [sysvector.x, sysvector.y, sysvector.z];
 
 %remove first 1000 measurements which contains noise due too filter stabilization
 if (size(timestamps,1) > 1000)
-timestamps = timestamps(1000:end,:);
+    timestamps = timestamps(1000:end,:);
     run = run(1000:end,:);
     accuracy = accuracy(1000:end,:);
     motiontype = motiontype(1000:end,:);
@@ -46,7 +46,6 @@ title('raw accel data ({m/s^2})', 'FontWeight','bold')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RAW DATA PLOT OF ONLY WALKING
-
 accel_walk = accel(motiontype==3,:);
 magnitudeWalk = sqrt(sum(accel_walk.^2,2));
 motiontype_walk = motiontype(motiontype==3);
@@ -68,35 +67,37 @@ title('magnitude of walking');
 %  k = 0;
 
 magLength = length(magnitudeWalk);
-x_max = 0;
-y = [0 0 0 ];
 
-for m=101:300
-    
-    for t = 60:10:100
-       x = auto_cor(magnitudeWalk,m,t);
-        %search for the max (period hit) of each run
-       if x > x_max
-           x_max = x;
-           %display(x_max); 
-       end       
+m_offset = 600;
+m_max = 1000;
+
+t_min = 70;
+t_max = 100;
+
+y = zeros(m_max, 1);
+
+for m = 1:m_max
+    for t = t_min:t_max
+       cor = auto_cor(magnitudeWalk, m+m_offset, t);
+       y(m) = max(cor, y(m));     
     end
-    y(m) = x_max;
-    x_max = 0;
 end
+
+
 
 %delete all zero entrees, prototyping all samples takes too long
 y(y==0) = [];
-
 disp(y);
 
-%can this be bigger than 1???
-disp(max(y));
+disp(max(y));    
+yround = round(y*100);
 
-%create histogram 
-y = round(y * 10);
+[yhist,xvalues] = hist(yround,unique(yround));
+yhist = yhist ./ sum(yhist);
 
-[std_walk_h , std_walk_x]   =  hist(std_walk,unique(std_walk));
+figure(3)
+clf
+plot(xvalues./100,yhist);
+legend('y');
+title('pdf y');
 
-
-    
