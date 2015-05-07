@@ -8,6 +8,8 @@
 % where:
 % -> motiontype: Walking(3), Queueing(2), Idle(1)
 
+file =  'accelLog1430829445327.txt';
+
 if exist(file, 'file')
     sysvector = tdfread(file, ',');
 else 
@@ -23,8 +25,6 @@ accel       = [sysvector.x, sysvector.y, sysvector.z];
 % calculate magnitude
 magnitude   = sqrt(sum(accel.^2, 2));
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RAW DATA
 
@@ -34,6 +34,7 @@ hold on
 plot(timestamps, accel);
 plot(timestamps, motiontype, 'Color',[0,0,0]);
 plot(timestamps, magnitude, 'Color',[0,1,1]);
+legend('accel','motiontype','magnitude');
 title('raw accel data ({m/s^2})', 'FontWeight','bold')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,6 +62,7 @@ hold on
 plot(mag10_idle_x/10, mag10_idle_h, 'Color',[1,0,0]);
 plot(mag10_walk_x/10, mag10_walk_h, 'Color',[0,1,0]);
 plot(mag10_queue_x/10, mag10_queue_h, 'Color',[0,0,1]);
+legend('idle','walk','queue');
 title('pdf of raw accel data ({m/s^2})', 'FontWeight','bold')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,8 +81,8 @@ title('pdf of raw accel data ({m/s^2})', 'FontWeight','bold')
 minrun = min(run);
 maxrun = max(run);
 
-std_idle;
-std_walk;
+std_idle = 0; 
+std_walk = 0;
 
 % for each run
 for r=minrun:maxrun
@@ -123,6 +125,7 @@ clf
 hold on
 plot(std_idle_x/10, std_idle_h, 'Color',[1,0,0]);
 plot(std_walk_x/10, std_walk_h, 'Color',[0,1,0]);
+legend('idle','walk');
 title('pdf std id raw accel data ({m/s^2})', 'FontWeight','bold')
 
 
