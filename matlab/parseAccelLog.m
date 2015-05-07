@@ -1,4 +1,6 @@
 % set 'file' var first.
+% add file path in home->setPath in matlab itself, point
+% to the log folder of the github project ;)
 % --> eg: file = '../logs/accelLog1430829445327.txt'
 
 
