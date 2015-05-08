@@ -2,6 +2,17 @@
 % H.van der Molen
 
 function [cor, hist_y, hist_x] = NASC(mmin, mmax, tmin, tmax, signal)
+    % INPUT
+    % mmin   = start index of sequence of samples to apply NASC on
+    % mmax   = end index of sequence of samples to apply NASC on
+    % tmin   = minimal windowsize to test for correlation
+    % tmax   = maximal windowsize to test for correlation
+    % signal = signal to check for NASC 
+    % OUTPUT
+    % cor    = correlation for all samples between mmin->mmax
+    % hist_y = pdf of correlation
+    % hist_x = x-axis values for pdf
+
     %correct max for tmax
     mmax = mmax - 2*tmax;
 
@@ -25,6 +36,13 @@ end
 
 
 function x = autocorrelation(a,m,t)	
+    % INPUT
+    % a = signal (nx1)
+    % m = vector of indices of samples to calculate autocorrelation on (mx1)
+    % t = width of window to use in the correlation calculation
+    % OUTPUT
+    % x = vector of autocorrelation values of all m-samples (mx1)
+    
     %matrix: represents index m+k, for all m-samples and all k=0...k=t+1 values
     m_k = coloncatrld(m, m+t-1);
 
