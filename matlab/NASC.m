@@ -28,10 +28,10 @@ function [cor, hist_y, hist_x] = NASC(mmin, mmax, tmin, tmax, signal)
     cor = max(cor')';
 
     %get normalised histogram
-    [hist_y, hist_x] = getNormHist(round(cor*100));
+    [hist_y, hist_x] = getNormHist(round(cor*10));
 
     %correct x for multiplication/int-casting
-    hist_x = hist_x ./ 100;
+    hist_x = hist_x ./ 10;
 end
 
 
