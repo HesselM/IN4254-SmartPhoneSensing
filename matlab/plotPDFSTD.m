@@ -26,9 +26,12 @@ for r=minrun:maxrun
         for idx=1:maxidx
             %determine motiontype which occures the most in the sampled window
             data_window = mt(idx:idx+windowsize);
-            [h,x] = hist(data_window, unique(data_window));
-            mostType = x(h==max(h));
-            mostType = mostType(1); %choose first item when even.
+            mostType = data_window(1); %if all types are equal
+            if (mean(data_window ~= data_window(1)))
+                [h,x] = hist(data_window, unique(data_window));
+                mostType = x(h==max(h));
+                mostType = mostType(1); %choose first item when even.
+            end
 
             %calculate deviation over wsize samples
             % and store deviation in correct array (walk/idle/step)
@@ -53,16 +56,20 @@ std_walk = round(std_walk*10);
 std_step = round(std_step*10);
 
 % get normalised histograms
-[hist_y_std_idle, hist_x_std_idle] = getNormHist(mag_idle);
-[hist_y_std_walk, hist_x_std_walk] = getNormHist(mag_walk);
-[hist_y_std_step, hist_x_std_step] = getNormHist(mag_step);
+[hist_y_std_idle, hist_x_std_idle] = getNormHist(std_idle);
+[hist_y_std_walk, hist_x_std_walk] = getNormHist(std_walk);
+[hist_y_std_step, hist_x_std_step] = getNormHist(std_step);
+
+hist_x_std_idle = hist_x_std_idle/10;
+hist_x_std_walk = hist_x_std_walk/10;
+hist_x_std_step = hist_x_std_step/10;
 
 %plot figure
 figure(3)
 clf
 hold on
-plot( hist_x_std_idle/10, hist_y_std_idle, 'Color',[1,0,0]);
-plot( hist_x_std_walk/10, hist_y_std_walk, 'Color',[0,1,0]);
-plot( hist_x_std_step/10, hist_y_std_step, 'Color',[0,0,1]);
+plot( hist_x_std_idle, hist_y_std_idle, 'Color',[1,0,0]);
+plot( hist_x_std_walk, hist_y_std_walk, 'Color',[0,1,0]);
+plot( hist_x_std_step, hist_y_std_step, 'Color',[0,0,1]);
 legend('idle','walk', 'qstep');
 title('pdf of std(magnitude) ({m/s^2})', 'FontWeight','bold')
