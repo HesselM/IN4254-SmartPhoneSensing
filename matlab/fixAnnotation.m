@@ -1,4 +1,4 @@
-function [arr_motion] = fixannotation(run, astart, aend, type, arr_motion, arr_run, arr_magnitude, wsize, show_pdf)
+function [arr_motion] = fixAnnotation(run, astart, aend, type, arr_motion, arr_run, arr_magnitude, wsize, show_pdf)
 % run    = runID of sequence to be corrected
 % astart = start index of sequence (read from graph!) 
 %       -1 = ignore
