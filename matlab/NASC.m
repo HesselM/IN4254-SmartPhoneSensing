@@ -1,7 +1,7 @@
 % J.Miog
 % H.van der Molen
 
-function [cor, hist_y, hist_x] = autocorrelation3(mmin, mmax, tmin, tmax, signal)
+function [cor, hist_y, hist_x] = NASC(mmin, mmax, tmin, tmax, signal)
     %correct max for tmax
     mmax = mmax - 2*tmax;
 
@@ -24,7 +24,7 @@ function [cor, hist_y, hist_x] = autocorrelation3(mmin, mmax, tmin, tmax, signal
 end
 
 
-function x = auto_cor2(a,m,t)	
+function x = autocorrelation(a,m,t)	
     %matrix: represents index m+k, for all m-samples and all k=0...k=t+1 values
     m_k = coloncatrld(m, m+t-1);
 
