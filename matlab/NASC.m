@@ -80,13 +80,6 @@ function x = autocorrelation(a,m,t)
     x = s ./ (t * std(a(m_t)) .* std(a(mt_t)));
 end
 
-function [h, x] = getNormHist(signal)
-    %calculate histogram
-    [h, x] = hist(signal,unique(signal));
-    %normalize
-    h  = h  ./ sum(h);
-end
-
 % source: http://blogs.mathworks.com/loren/2008/10/13/vectorizing-the-notion-of-colon/
 function x = coloncatrld(start, stop)
     % COLONCAT Concatenate colon expressions
