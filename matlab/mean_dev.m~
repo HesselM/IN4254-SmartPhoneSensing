@@ -1,3 +1,0 @@
-function u = mean_dev(sign, t , m)
-	u = sum(sign(m-t:m))/t;
-end
