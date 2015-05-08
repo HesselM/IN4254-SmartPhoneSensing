@@ -21,7 +21,7 @@ function [cor, hist_y, hist_x] = NASC(mmin, mmax, tmin, tmax, signal)
 
     %detemine correlation
     for t = tmin:tmax
-        cor(:,t-tmin+1) = auto_cor2(signal, mmin:mmax, t);
+        cor(:,t-tmin+1) = autocorrelation(signal, mmin:mmax, t);
     end
     
     %get maximum correlation for each sample
@@ -72,7 +72,7 @@ function x = autocorrelation(a,m,t)
     mean_mt_t = mean(a(mt_t));
     mean_mt_t = mean_mt_t(ones(1,t),:);
     
-    % EXPECTED VALUE
+    % EXPECTED VALUE              
     s = sum( (a(m_k) - mean_m_t) .* (a(m_k+t) - mean_mt_t) );
       
     % NORMALISATION (?) 
