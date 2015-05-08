@@ -1,0 +1,22 @@
+peak detector
+
+
+step detectie dus met knn
+
+walking autocorrelatie
+voor het detecteren van het lopen zijn hebben de magnitude van de accelerometer gebruikt. We hebben eerste een plot gemaakt om te kijken hoe het signaal eruit zou zien. 
+
+te zien is dat het een vrij lastig te classificieren signaal is. Daarom hebben we, net als in de paper "zero-effort crowdsourcing for indoor localization" een standaard deviation in magnitude van de acceleration gemaakt. 
+
+deze kwam niet heel erg overeen. Om nog data te filteren hebben we een laagdoorlaat filter gebruikt met een cutoff van 40 hz, om de mogelijke pieken, vooral bij die idle toestand, uit 
+het signaal te halen
+
+autocorrelation zelf, als in ' maximum normalized auto correlation ' is er nauwelijks op
+vooruit gegaan door het filter.
+
+dit is onderscheidt durf ik niet zomaar te maken, op basis van kans
+
+dus ik stel voor dat we gewoon kijken naar de std deviation en zeggen dat als die magnitude kleiner is dan 0,5 (m/s^2) dat we dan aannemen dat de telefoon in idle is?
+
+misschien meer data verzamelen over lopen, of zoals hij zei, klakkeloos aannemen vanuit de paper dat als y(max(x)) > 0,07 dat we dan zeer waarschijnlijk aan het lopen zijn...
+
