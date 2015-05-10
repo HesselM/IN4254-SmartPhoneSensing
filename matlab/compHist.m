@@ -24,6 +24,11 @@ function result = compHist(hi, xi, hs, xs, hw, xw)
     % g = percentage of pdf of 'w' with a probability greater than 'i'
     % h = percentage of pdf of 'w' with a probability greater than 's'
     % j = percentage of pdf of 'w' with a probability greater than 'i' and 's'
+    %
+    % In most ideal situation, the matrix only conatins 1's. This would
+    % indicate that none of the pdfs overlap, hence we selected awesome
+    % features which are 100% distinguble for each motiontype.
+    % >> The best matrix is the matrix with highest values.
 
     % find percentage of area of 'idle'>'step' and 'step'>'idle'
     [i_s, s_i, xis, his] = overlap(hi, xi, hs, xs);
