@@ -1,64 +1,100 @@
-function o = compHist(hi, xi, hs, xs, hw, xw)
-%
-% hi = histogram values of 'idle'
-% xi = x-values of histogram of 'idle'
-% hs = histogram values of 'step'
-% xs = x-values of histogram of 'step'
-% hw = histogram values of 'step'
-% xw = x-values of histogram of 'walk'
+function result = compHist(hi, xi, hs, xs, hw, xw)
+    %INPUT
+    % hi = histogram values of 'idle'
+    % xi = x-values of histogram of 'idle'
+    % hs = histogram values of 'step'
+    % xs = x-values of histogram of 'step'
+    % hw = histogram values of 'step'
+    % xw = x-values of histogram of 'walk'
+    %
+    %OUTPUT
+    % 3x3 matrix:
+    %     i s w
+    %    ------
+    % i | a b c
+    % s | d e f
+    % w | g h j
+    %
+    % a = percentage of pdf of 'i' with a probability greater than 's' and 'w'
+    % b = percentage of pdf of 'i' with a probability greater than 's'
+    % c = percentage of pdf of 'i' with a probability greater than 'w'
+    % d = percentage of pdf of 's' with a probability greater than 'i'
+    % e = percentage of pdf of 's' with a probability greater than 'w' and 'i'
+    % f = percentage of pdf of 's' with a probability greater than 'w'
+    % g = percentage of pdf of 'w' with a probability greater than 'i'
+    % h = percentage of pdf of 'w' with a probability greater than 's'
+    % j = percentage of pdf of 'w' with a probability greater than 'i' and 's'
 
-% find overlap of 'idle' and 'step'
-[o_is, o_si, i_is, i_si, x_is] = overlap(hi, xi, hs, xs);
+    % find percentage of area of 'idle'>'step' and 'step'>'idle'
+    [i_s, s_i, xis, his] = overlap(hi, xi, hs, xs);
 
-% find overlap of 'step' and 'walk'
-[o_sw, o_ws, i_sw, i_ws, x_sw] = overlap(hs, xs, hw, xw);
+    % find percentage of area of 'step'>'walk' and 'walk'>'step'
+    [s_w, w_s, xsw, hsw] = overlap(hs, xs, hw, xw);
 
-% find overlap of 'walk' and 'idle'
-[o_wi, o_iw, i_wi, i_iw, x_wi] = overlap(hw, xw, hi, xi);
+    % find percentage of area of 'walk'>'idle' and 'idle'>'walk'
+    [w_i, i_w, xwi, hwi] = overlap(hw, xw, hi, xi);
 
-% find overlap of 'walk', 'idle' and 'step'
-% intersect(intersect(idle, step), walk)
-[x_isw, i_isw, i_wis] = intersect(x_is, xw);
-o_wis = sum(hw(i_wis));
-o_isw = sum(hi(i_is(i_isw)));
-o_swi = sum(hs(i_si(i_isw)));
+    % find percentage of area of 'idle&step'>'walk' and 'walk'>'idle&step'
+    [is_w, w_is] = overlap(his, xis, hw, xw);
 
-% compute missing overlaps:
-o_isw = o_isw;        % sum of h-values of idle: overlap with step and walk
-o_is  = o_is - o_isw; % sum of h-values of idle: overlap with step, without walk
-o_iw  = o_iw - o_isw; % sum of h-values of idle: overlap with walk, without step
-o_i   = sum(hi) - o_isw - o_is - o_iw; % sum of h-values of idle: without any overlap 
+    % find percentage of area of 'step&walk'>'idle' and 'idle'>'step&walk'
+    [sw_i, i_sw] = overlap(hsw, xsw, hi, xi);
 
-o_swi = o_swi;        % sum of h-values of step: overlap with walk and idle
-o_si  = o_si - o_swi; % sum of h-values of step: overlap with idle, without walk
-o_sw  = o_sw - o_swi; % sum of h-values of step: overlap with walk, without idle
-o_s   = sum(hs) - o_swi - o_si - o_sw; % sum of h-values of step: without any overlap 
+    % find percentage of area of 'walk&idle'>'step' and 'step'>'walk&idle'
+    [wi_s, s_wi] = overlap(hwi, xwi, hs, xs);
 
-o_wis = o_wis;        % sum of h-values of walk: overlap with idle and step
-o_wi  = o_wi - o_wis; % sum of h-values of walk: overlap with idle, without step
-o_ws  = o_ws - o_wis; % sum of h-values of walk: overlap with step, without idle
-o_w   = sum(hw) - o_wis - o_wi - o_ws; % sum of h-values of walk: without any overlap 
+    % build matrix
+    a = i_sw;
+    b = i_s;
+    c = i_w;
+    d = s_i;
+    e = s_wi;
+    f = s_w;
+    g = w_i;
+    h = w_s;
+    j = w_is;
 
-%put everything in a matrix
-%overlap: none idle  step  walk all
-o =     [ o_i  0.00  o_is  o_iw  o_isw;
-          o_s  o_si  0.00  o_sw  o_swi;
-          o_w  o_wi  o_ws  0.00  o_wis ];
-      
-%normalise overlap
-s = sum(o,2);
-s = s(:, ones(1, size(o,2)));
-o = o ./ s;
-  
+    result = [a b c; d e f; g h j];
 end
 
-function [overlap_12, overlap_21, idx1, idx2, xval] = overlap(h1, x1, h2, x2)
+function [h1_prob, h2_prob, x12, h12] = overlap(h1, x1, h2, x2)
 
+    % combined histogram
+    x12 = union(x1, x2);
+    h12 = zeros(size(x12));
+    %assign h1 values
+    for i=1:size(x1,2)
+       idx_x12 = (x12==x1(i));
+       h12(idx_x12) = h1(i);
+    end
+    %assign h2 values
+    for i=1:size(x2,2)
+       idx_x12 = (x12==x2(i));
+       h12(idx_x12) = max([h12(idx_x12) h2(i)]);
+    end
+    
+    % area estimates
+    
     % find equal x-values of 'x1' and 'x2'
-    [xval, idx1, idx2] = intersect(x1, x2);
+    [notused, idx1, idx2] = intersect(x1, x2);
 
-    % determine amount of overlap
-    overlap_12 = sum(h1(idx1));
-    overlap_21 = sum(h2(idx2));
+    % get histogram values at intersect-indices
+    h1_val = h1(idx1);
+    h2_val = h2(idx2);
+    
+    % determine area of h1 > h2 for each x-value
+    h1_top = h1_val - h2_val;           %h1>h2 at interset-window
+    h1_top(h1_top < 0) = 0;             %remove negative values (== h2>h1)
+    h1_top = sum(h1_val) - sum(h1_top); %area in intersect: h1 < h2
+    h1_top = sum(h1) - h1_top;          %area of h1 > h2 
 
+    % get area of h2 which is 'above' h1
+    h2_top = h2_val - h1_val;           %h2>h1 at interset-window
+    h2_top(h2_top < 0) = 0;             %remove negative values (== h2>h1)
+    h2_top = sum(h2_val) - sum(h2_top); %area in intersect: h2 < h1
+    h2_top = sum(h2) - h2_top;          %area of h2 > h1
+    
+    %transform 'area' to probabilities:
+    h1_prob = h1_top / sum(h1);
+    h2_prob = h2_top / sum(h2);
 end
