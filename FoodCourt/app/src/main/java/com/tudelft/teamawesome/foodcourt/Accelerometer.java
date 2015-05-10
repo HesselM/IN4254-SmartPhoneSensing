@@ -96,6 +96,10 @@ public class Accelerometer implements SensorEventListener {
             //message user has to wait for filter to reach steady state
             Toast toast = Toast.makeText(this.appContext, "Accel still booting up", Toast.LENGTH_SHORT);
             toast.show();
+            // accel is not yet booted
+            if (collectedSamples == 0) {
+                startAccel(false, false);
+            }
         }
     }
 
@@ -125,6 +129,7 @@ public class Accelerometer implements SensorEventListener {
             listening  = false;
             logdata    = false;
             filterDone = false;
+            collectedSamples = 0;
         }
     }
 
