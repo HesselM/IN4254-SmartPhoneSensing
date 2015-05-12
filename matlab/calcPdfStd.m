@@ -37,7 +37,7 @@ function [hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, motiontype, magnitude
             for idx=1:maxidx
 
                 %get datawindow
-                dwindow = mag(idx:idx+wisze);
+                dwindow = mag(idx:idx+wsize);
                 
                 %determine std of datawindow
                 std_dwindow = std(dwindow);
