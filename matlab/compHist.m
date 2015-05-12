@@ -1,3 +1,4 @@
+% TODO: gaussian smoothing!
 function result = compHist(hi, xi, hs, xs, hw, xw)
     %INPUT
     % hi = histogram values of 'idle'
