@@ -1,4 +1,4 @@
-function exportAnnotation(usedLog,t,r,a,m,xyz)
+function exportAnnotation(usedLog,t,r,a,m,xyz) 
     %use name of old file to generate new filename
     filename = usedLog(1:end-4); % remove '.txt'
     filename = strcat(filename, '_corrected');
