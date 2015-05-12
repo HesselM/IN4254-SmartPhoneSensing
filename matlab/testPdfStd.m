@@ -1,6 +1,6 @@
 %test different sizes
 
-function testPDFSTD
+function testPdfStd
 testPDFSTDw(10);
 testPDFSTDw(20);
 testPDFSTDw(30);
