@@ -99,7 +99,7 @@ NOTE: signal has to be a categorised signal, that is, it should only contain int
 INPUT
 - m      = [1xM] annotated motion type of each value in signal
 - signal = [1xM] vector to generate PDF from. 
-- binacc = accuracy factor 'f', see [getNormHist][###getNormHist(signal)]
+- binacc = accuracy factor 'f', see [getNormHist](#getnormhistsignal)
 
 OUTPUT
 - hi = [1xN] histogram values (pdf) of 'idle'
