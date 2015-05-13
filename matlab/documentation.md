@@ -78,6 +78,7 @@ This wil show the signal and motiontype in `figure(fign)`. Using the values of t
 
 ###getNormHist(signal)
 !!-TO BE UPDATED: REMOVE CATEGORISATION AND ADD DISTRIBUTION FIT--!!
+!!-USES DEPRECADED HIST-FUNCTION OF MATLAB-!!
 ```
 [h, x] = getNormHist(signal)
 ```
@@ -111,7 +112,7 @@ OUTPUT
 
 This function creates a pdf of a given signal. 
 
-### calcPdfStd
+### calcPdfStd(wsize, r, m, signal, binacc)
 !!-TO BE UPDATED: REMOVE CATEGORISATION AND ADD DISTRIBUTION FIT--!!
 ```
 [hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, r, m, signal, binacc)
@@ -133,8 +134,42 @@ OUTPUT
 
 This function calculates the standard deviation of an sample `n` in `signal` using an sliding window of `wsize` samples. The samples used for the standard deviation are chosen to be at position `n:n+wsize`. 
 
-### compPdf
+### compPdf(hi, xi, hs, xs, hw, xw)
+```
+pmatrix = compPdf(hi, xi, hs, xs, hw, xw)
+```
 
+INPUT
+- hi = [1xN] histogram values (pdf/pdfstd) of 'idle'
+- xi = [1xN] x-values of histogram of 'idle'
+- hs = [1xO] histogram values (pdf/pdfstd) of the std of 'step'
+- xs = [1xO] x-values of histogram of 'step'
+- hw = [1xP] histogram values (pdf/pdfstd) of the std of 'step'
+- xw = [1xP] x-values of histogram of  'walk'
+
+OUTPUT
+- pmatrix = [3x3] a matrix containing probabilities of misclassification:
+```
+ pmatrix = 3x3 matrix = 
+        i s w
+        ------
+    i | a b c
+    s | d e f
+    w | g h j
+```
+- a = Probability that a sample of type 'i' is (correctly) classified as i
+- b = Probability that a sample of type 'i' is (mis)-classified as s
+- c = Probability that a sample of type 'i' is (mis)-classified as w
+- d = Probability that a sample of type 's' is (mis)-classified as i
+- e = Probability that a sample of type 's' is (correctly) classified as s
+- f = Probability that a sample of type 's' is (mis)-classified as w
+- g = Probability that a sample of type 'w' is (mis)-classified as i
+- h = Probability that a sample of type 'w' is (mis)-classified as s
+- j = Probability that a sample of type 'w' is (correctly) classified as w
+
+This function calculates (using the given pdfs) the probability of missclassication.
+It can be used to determine which set of pdfs provides more distinct features. Ideally
+`pmatrix` should look like an 3x3 identity matrix with only zeros and ones at the diagonal, indicating that each sample will be correctly classified.
 
 ### NASC
 
