@@ -1,10 +1,10 @@
-function [hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, motiontype, magnitude, binacc)
+ function [hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, m, signal, binacc)
     % INPUT:
-    % wsize       = number of samples used in a moving window
-    % run         = annotation of run-number           nx1
-    % motiontype  = type of motion of accel-sample     nx1
-    % magnitude   = magnitude of accel-sample          nx1
-    % binacc      = multiplication value for bin accuracy (1x1)
+    % wsize     = number of samples used in a moving window
+    % run       = annotation of run-number           nx1
+    % m         = type of motion of accel-sample     nx1
+    % signal    = signal used for the std            nx1
+    % binacc    = multiplication value for bin accuracy (1x1)
     %                   accuracy = 1/binacc
     % OUTPUT:
     % hi = histogram values of 'idle'
@@ -26,18 +26,18 @@ function [hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, motiontype, magnitude
     % for each run
     for r=minrun:maxrun
 
-        % get magnitude
-        mag = magnitude(run==r);
-        mt  = motiontype(run==r);
+        % get signal
+        sig = signal(run==r);
+        mt  = m(run==r);
 
         % check if there are at least wsize samples 
-        % ASSUMPTION: all wsize samples have an equal motiontype!!
-        maxidx = size(mag,1) - wsize;
+        % ASSUMPTION: all wsize samples have an equal m!!
+        maxidx = size(sig,1) - wsize;
         if (maxidx > 1)
             for idx=1:maxidx
 
                 %get datawindow
-                dwindow = mag(idx:idx+wsize);
+                dwindow = sig(idx:idx+wsize);
                 
                 %determine std of datawindow
                 std_dwindow = std(dwindow);
@@ -62,11 +62,7 @@ function [hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, motiontype, magnitude
     %   to get the histogram accurate at 0.1
 
     % get normalised histograms
-    [hi, xi] = getNormHist(round(std_idle*binacc));
+    [hi, xi] = getNormHist(std_idle);
     [hw, xw] = getNormHist(round(std_walk*binacc));
     [hs, xs] = getNormHist(round(std_step*binacc));
-
-    xi = xi/binacc;
-    xw = xw/binacc;
-    xs = xs/binacc;
 end
