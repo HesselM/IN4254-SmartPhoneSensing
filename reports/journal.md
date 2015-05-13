@@ -37,13 +37,23 @@ Extra features may be added, and the above described features may change as we w
 ### 2.1 - Done so-far (May 13th 2015)
 
 #### 2.1.1 - App
-An app is created with the following functionality
+An app is created with the following functionality:
+- Accelerometer calibration
+- Database containg bias estimate and recorded data
+- Data export function
+- Data annotation function
 
+#### 2.1.2 - Matlab tools
+Several matlab tools are created. These tools are documented in [documentation.md](../matlab/documentation.md) are can be found in the matlab folder. 
 
-Using the research of A.Rai et al. as lead, several window sizes `w` for the mean and standard deviation (std) of the magnitude where used. Determining the mean or std for a sample `i` is done by using all samples between `i:i+w`, which will result in a non-real time application (since at least `w`-samples are needed to compute the features of sample `i`). 
+Using these tools several statistics of the data and features can be calculated.  Currently there are some errors in some assumptions, hence correct statistics can not be shown. 
 
-Combining all test-data, pdf’s are generated for different window sizes. Window-sizes for feature detection are chosen, based on the amount of overlap of each pdf. The lower the overlap, the better such an window-size is suitable. 
+Two main challenges which are currently being developed tackeled:
 
+- What windowsize should `calcPdfStd` have? Different windowsizes result in different pdfs, hence different classification errors. The [`compPdf`](compPdf) functions is able to calculate the probability of misclassifiction given the pdfs of idle, step and walk. It is however based on a deprecated `hist`-function of matlab and does not include data fitting, hence is prone to errros in the probability due too missing datasamples. Using the probability of misclassication helps in determing windowssizes which result in more robust features and classification.
+- NASCS, while implemented and functioning, it is not yet able to estimate the stepping frequency. It is possibily also not correctly applied to the data, hence the pdf of walk and idle might show more (or less) difference as it currently does.
+
+All running windows, using a windowsize of `w`, use the `w` upcomping samples to determined the value of a feature of a sample `i`. Hence, the samples in window `i:i+w` are used, resulting in a non-real time application. When `w` is low (50 or lower), the system has to wait only 1 second (or less) for feature classifcation. 
 
 
 #### 2.1.3 - Current open issues/TODO's
@@ -65,7 +75,7 @@ NASC: Currently autocorrelation is calculated differently as the other initial f
 
 Feature selection: based on all research, determine features and generate feature data-file.
 
-Feature update: The magnitude can of a sample, can als be calculated (just as the std) as the mean over the magnitude of n-samples. This would remove peaks introduced by noise
+Feature update: The magnitude of a sample is currently calculated with the xyz-accel data. Which might include a lot of noise. To reduce the sensibility to noise the magnitude can be calculated by using a sliding window (just as the std) as the mean over the magnitude of n-samples. Need to test if this approach improves classification.
 
 Feature update: the initial set of features does not the option to determine the direction of an acceleration and if an user is shaking an device. When direction is included, shaking gestures (noise) can be interpreted and removed. It is however net yet clear how much effect shaking behavior has at the current set of selected features.
 
@@ -91,22 +101,9 @@ App-upgrade: feature extractation of recording data
 
 
 
-
-
-## 3 - Extra ideas
-
-
-
-
 ## 4 - Final design
 (describes our final design for activity monitoring)
 (will be used in our report)
 
 
-##Evaluation Setup : Training and testing
-
-
-----
-QUESTIONS
-----
 
