@@ -74,11 +74,54 @@ m = fixAnnotation(rid, -1, -1, -1, m, r, sig, fign)
 This wil show the signal and motiontype in `figure(fign)`. Using the values of the x-axis, `is` and `ie` can be set to cover the section of which the motiontype should be updated.
 
 
+## data-functions
+
+###getNormHist(signal)
+!!-TO BE UPDATED: REMOVE CATEGORISATION AND ADD DISTRIBUTION FIT--!!
+```
+[h, x] = getNormHist(signal)
+```
+INPUT
+- signal = [1xM] vector to generate histogram from. 
+
+OUTPUT
+- h = [1xN] value of each bin
+- x = [1xN] 'category' of each bin (that is, the value in signal, of which 'h(i)' is the frequency from)
+
+NOTE: signal has to be a categorised signal, that is, it should only contain integers. Hence data to generate a histogram of, should be multiplied by a factor 'f' and rounded to the nearest integer, mainting a resolution of '1/f'. 
 
 
+### calcPdf(m, signal, binacc)
+!!-TO BE UPDATED: REMOVE CATEGORISATION AND ADD DISTRIBUTION FIT--!!
+```
+[hi, xi, hs, xs, hw, xw] = calcPdf(m, signal, binacc)
+```
+INPUT
+- m      = [1xM] annotated motion type of each value in signal
+- signal = [1xM] vector to generate PDF from. 
+- binacc = accuracy factor 'f', see [getNormHist][###getNormHist(signal)]
 
-## data
+OUTPUT
+- hi = [1xN] histogram values (pdf) of 'idle'
+- xi = [1xN] x-values of histogram of 'idle'
+- hs = [1xO] histogram values (pdf) of 'step'
+- xs = [1xO] x-values of histogram of 'step'
+- hw = [1xP] histogram values (pdf) of 'step'
+- xw = [1xP] x-values of histogram of 'walk'
 
+This function creates a pdf of a given signal. 
+
+### calcPdfStd
 '[hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, motiontype, magnitude, binacc)'
+### compPdf
+### NASC
+
+## plot-functions
+
+### plotPdfStd
+
+## test-functions
+### testNASC
+### testPdfStd
 
 
