@@ -1,3 +1,22 @@
+#index
+
+-[Functions](#Functions)
+--[logfile-functions](#logfile-functions)
+---[logImport(file, plot_raw)](#logimportfile-plot_raw)
+---[logExport(file,t,r,a,m,accel)](#logexportfiletramaccel)
+--[fixAnnotation(rid, is, ie, nt, m, r, sig, fign)](#fixannotationrid-is-ie-nt-m-r-sig-fign)
+--[data-functions](#data-functions)
+---[getNormHist(signal)](#getnormhistsignal)
+---[calcPdf(m, signal, binacc)](#calcpdfm-signal-binacc)
+---[calcPdfStd(wsize, r, m, signal, binacc)](#calcpdfstdwsize-r-m-signal-binacc)
+---[compPdf(hi, xi, hs, xs, hw, xw)](#comppdfhi-xi-hs-xs-hw-xw)
+---[NASC(mmin, mmax, tmin, tmax, signal)](#nascmmin-mmax-tmin-tmax-signal)
+--[plot-functions](#plot-functions)
+---[plotPdfStd](#plotpdfstd)
+--[test-functions](#test-functions)
+---[testNASC](#testnasc)
+---[testPdfStd(wsize, r, m, signal)](#testpdfstdwsize-r-m-signal)
+
 #Functions
 
 ## logfile-functions
