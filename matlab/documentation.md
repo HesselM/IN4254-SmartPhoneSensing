@@ -27,10 +27,16 @@ OUTPUT:
 
 ### logExport(usedLog,t,r,a,m,xyz) 
 
-### fixAnnotation(rid, is, ie, nt, m, r, signal, fign)
+### fixAnnotation(rid, is, ie, nt, m, r, sig, fign)
 ```
-[m] = fixAnnotation(rid, is, ie, nt, m, r, sig)
+m = fixAnnotation(rid, is, ie, nt, m, r, sig, fign)
 ```
+Adjust annotation of motiontypes. It can be used to specify or correct errors when recording a dataset. To start using this function, first run it without specifying `is` and `ie`:
+```
+m = fixAnnotation(rid, -1, -1, -1, m, r, sig, fign)
+```
+This wil show the signal and motiontype in `figure(fign)`. Using the values of the x-axis, `is` and `ie` can be set to cover the section of which the motiontype should be updated.
+
 INPUT:
 - rid   = run-id to fix annotation of
 - is    = start index of section to update (ignore=-1, start=0)
