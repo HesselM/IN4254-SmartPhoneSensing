@@ -112,8 +112,30 @@ OUTPUT
 This function creates a pdf of a given signal. 
 
 ### calcPdfStd
-'[hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, motiontype, magnitude, binacc)'
+!!-TO BE UPDATED: REMOVE CATEGORISATION AND ADD DISTRIBUTION FIT--!!
+```
+[hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, r, m, signal, binacc)
+```
+INPUT
+- wsize  = number which specifies the width of the sliding window to calculate the std over.
+- r      = [1xM] run id vector of imported log
+- m      = [1xM] annotated motion type of each value in signal
+- signal = [1xM] vector to generate PDF from. 
+- binacc = accuracy factor 'f', see [getNormHist](#getnormhistsignal)
+
+OUTPUT
+- hi = [1xN] histogram values (pdf) of the std of 'idle'
+- xi = [1xN] x-values of histogram of the std of  'idle'
+- hs = [1xO] histogram values (pdf) of the std of 'step'
+- xs = [1xO] x-values of histogram of the std of 'step'
+- hw = [1xP] histogram values (pdf) of the std of 'step'
+- xw = [1xP] x-values of histogram of  the std of 'walk'
+
+This function calculates the standard deviation of an sample `n` in `signal` using an sliding window of `wsize` samples. The samples used for the standard deviation are chosen to be at position `n:n+wsize`. 
+
 ### compPdf
+
+
 ### NASC
 
 ## plot-functions
