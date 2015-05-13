@@ -62,7 +62,7 @@
     %   to get the histogram accurate at 0.1
 
     % get normalised histograms
-    [hi, xi] = getNormHist(std_idle);
+    [hi, xi] = getNormHist(round(std_idle*binacc));
     [hw, xw] = getNormHist(round(std_walk*binacc));
     [hs, xs] = getNormHist(round(std_step*binacc));
 end
