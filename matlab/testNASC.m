@@ -3,7 +3,7 @@
 % H. van der Molen
 
 %load datafile
-[timestamps, run, accuracy, motiontype, accel, magnitude] = loadLog(file);
+[timestamps, run, accuracy, motiontype, accel, magnitude] = logImport(file);
 
 %NASC on motion
 signal = magnitude(motiontype==3); %walk
