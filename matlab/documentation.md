@@ -9,6 +9,7 @@
 INPUT:
 - file     = filename, e.g. '../logs/log_accelActivity1431006940761.txt'
 - plot_raw = true/false, plot raw values in graph
+
 OUTPUT:
 - t        = [1xM] timestamp of each record
 - r        = [1xM] run id of record
@@ -61,6 +62,7 @@ INPUT:
 - r     = [1xM] run id vector of imported log
 - sig   = signal to use annoation with
 - fign  = figure number of figrue to show data in
+
 OUTPUT:
 - m     = [1xM] updated annotated motion type (idle=1, walk=3, step=4)
 
