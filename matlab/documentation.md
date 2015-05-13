@@ -193,9 +193,40 @@ This function computes the 'Normalized Auto-correlation based Step Counting' of 
 ## plot-functions
 
 ### plotPdfStd
+Plot pdf in a figure
+
 
 ## test-functions
 ### testNASC
-### testPdfStd
+still buggy. Needs to be defined as function. Can be used to test NSAC on different signals
 
+
+### testPdfStd(wsize, r, m, signal)
+```
+pmatrix = testPdfStd(wsize, r, m, signal)
+```
+
+INPUT
+- wsize = [1xN] N different windowsizes to test the [calcPdfStd](#calcpdfstdwsize-r-m-signal-binacc) function
+- r     = [1xM] run id vector of imported log
+- m     = [1xM] annotated motion type of imported log (idle=1, walk=3, step=4)
+- sig   = [1xM] signal for pdf
+
+OUTPUT:
+- pmatrix = [Nx10] each row contains the wsize used to calculate the probability of misclassification of the pdfstd and the 9 probabilities calculated by [compPdf](#comppdfhi-xi-hs-xs-hw-xw)
+
+Computes a probability matrix which can be used to compare differen windowsizes to determine which windowsize might be best suitable for feature definition.
+
+Example:
+```
+>> testPdfStd([10,20,30],run,motiontype,magnitude)
+
+ans =
+
+wsize      a         b         c         d         e         f         g         h         j 
+10.0000    0.7208    0.2254    0.0538    0.2254    0.5029    0.2718    0.0538    0.2718    0.6744
+20.0000    0.7681    0.1954    0.0365    0.1954    0.5477    0.2569    0.0365    0.2569    0.7066
+30.0000    0.7596    0.2038    0.0367    0.2038    0.5595    0.2367    0.0367    0.2367    0.7266
+
+```
 
