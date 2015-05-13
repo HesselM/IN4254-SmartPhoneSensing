@@ -3,7 +3,9 @@
 ## log
 
 ### logImport(file, plot_raw)
-```[t, r, a, m, accel, mag] = logImport(file, plot_raw)```
+```
+[t, r, a, m, accel, mag] = logImport(file, plot_raw)
+```
 Import a logfile. The file should start with a description (name) of each column. Each consecutive line should contain a value of the coresponsing column, seperated with a comma. e.g:
 ```
 timestamp,run,accuracy,motiontype,x,y,z
@@ -26,7 +28,9 @@ OUTPUT:
 ### logExport(usedLog,t,r,a,m,xyz) 
 
 ### fixAnnotation(rid, is, ie, nt, m, r, signal, fign)
-```[m] = fixAnnotation(rid, is, ie, nt, m, r, sig)
+```
+[m] = fixAnnotation(rid, is, ie, nt, m, r, sig)
+```
 INPUT:
 - rid   = run-id to fix annotation of
 - is    = start index of section to update (ignore=-1, start=0)
