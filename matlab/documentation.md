@@ -171,7 +171,24 @@ This function calculates (using the given pdfs) the probability of missclassicat
 It can be used to determine which set of pdfs provides more distinct features. Ideally
 `pmatrix` should look like an 3x3 identity matrix with only zeros and ones at the diagonal, indicating that each sample will be correctly classified.
 
-### NASC
+### NASC(mmin, mmax, tmin, tmax, signal)
+```
+[cor, hist_y, hist_x] = NASC(mmin, mmax, tmin, tmax, signal)
+```
+
+INPUT
+- mmin   = start index of sequence of samples to apply NASC on
+- mmax   = end index of sequence of samples to apply NASC on
+- tmin   = minimal windowsize to test for correlation
+- tmax   = maximal windowsize to test for correlation
+- signal = signal to check for NASC 
+
+OUTPUT:
+- cor    = [1x(mmax-mmin)] maximum correlation of interval tmin-tmax of each sample in interval mmin->mmax
+- h      = [1xN] value of each bin ( see [getNormHist](#getnormhistsignal) )
+- x      = [1xN] 'category' of each bin ( see [getNormHist](#getnormhistsignal) )
+
+This function computes the 'Normalized Auto-correlation based Step Counting' of each sample, based on the function described [by A. Rai et al.](http://research.microsoft.com/pubs/166309/com273-chintalapudi.pdf)
 
 ## plot-functions
 
