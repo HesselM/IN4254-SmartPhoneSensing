@@ -1,4 +1,4 @@
-function [timestamps, run, accuracy, motiontype, accel, magnitude] = loadLog(file, plot_raw)
+function [timestamps, run, accuracy, motiontype, accel, magnitude] = logImport(file, plot_raw)
     % parse accel-log into matlab usabel vectors;
     % INPUT
     % file     = filename, e.g. '../logs/log_accelActivity1431006940761.txt'
