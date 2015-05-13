@@ -57,7 +57,10 @@ All running windows, using a windowsize of `w`, use the `w` upcomping samples to
 
 
 #### 2.1.3 - Current open issues/TODO's
-Upgrade the static calibration step of app with the more dynamic Kalman filter. The basic idea is explained [here](http://www.gamasutra.com/view/feature/129919/wheres_the_wiimote_using_kalman_.php?page=4). Requesting the user to put the phone on an table we can signal if the estimated bias does not change, e.g. has reached the 'true' offset of the accelerometer. This bias can be used to correct measurements. Removing the static calibration step ensures we are less likely to measure data with a faulty bias, hence do incorrect predictions.
+NOTE: Name in front of TODO states who is working (or will work) on it.
+
+
+Hessel: Upgrade the static calibration step of app with the more dynamic Kalman filter. The basic idea is explained [here](http://www.gamasutra.com/view/feature/129919/wheres_the_wiimote_using_kalman_.php?page=4). Requesting the user to put the phone on an table we can signal if the estimated bias does not change, e.g. has reached the 'true' offset of the accelerometer. This bias can be used to correct measurements. Removing the static calibration step ensures we are less likely to measure data with a faulty bias, hence do incorrect predictions.
 
 Upgrade start/stop of accelerometer in the app with start/stop/pause. In the current implementation the accelero meter is unregisterd if an user want to stop measuring (temporarily). Starting the accelerometer requires a new bias-estimate since the bias changes on accelerometer-booting. By introducing an 'pause' button the accelerometer can keep running, while data is not stored in the database. Current flags to do this are already (partially) in place
 
@@ -65,7 +68,7 @@ More datasets! We need more! And a list for each dataset/run to determine amount
 
 Tool to concat datasets. 
 
-PDF-fitting. All current matlab tools compute histograms and pdfs using the deprecated 'hist'-function. The get better estimates (for example for the [compPdf](compPdf) function), it might be better to use a fit on the (differently calculated?) histogram and use this fit compare different windowsizes. The function [alldistfit](http://www.mathworks.com/matlabcentral/fileexchange/34943-fit-all-valid-parametric-probability-distributions-to-data) at matlab exchange (referenced from [this](http://blogs.mathworks.com/pick/2012/02/10/finding-the-best/) article) might be a good start. 
+Hessel: PDF-fitting. All current matlab tools compute histograms and pdfs using the deprecated 'hist'-function. The get better estimates (for example for the [compPdf](compPdf) function), it might be better to use a fit on the (differently calculated?) histogram and use this fit compare different windowsizes. The function [alldistfit](http://www.mathworks.com/matlabcentral/fileexchange/34943-fit-all-valid-parametric-probability-distributions-to-data) at matlab exchange (referenced from [this](http://blogs.mathworks.com/pick/2012/02/10/finding-the-best/) article) might be a good start. 
 
 NASC: update code to select step-frequency. Current results of NASC show the maximum auto correlation for all t-values for each sample, which might introduce a lot of error. We might need to introduce/design an extra functions which tries to figure out the stepping frequency `t`, which than (just as in the paper) can be used to decrease the interval at which NASC is calculated: going from `40:100`, to `t-10:t+10`. This function eventually needs to be implemented into the app
 
@@ -98,6 +101,11 @@ App-upgrade: feature extractation of recording data
 
 ### 2.2 - After May 13th 2015
 (will be regulary updated)
+
+
+
+
+
 
 
 
