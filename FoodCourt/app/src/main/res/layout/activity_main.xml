@@ -17,6 +17,15 @@
             android:layout_height="wrap_content"
             android:onClick="accelCalibrate"
             android:text="@string/accelCalibrate" />
+
+        <Button
+            android:id="@+id/btn_AccelExportBias"
+            android:layout_weight=".5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="accelExportBias"
+            android:text="@string/accelExportBias" />
+
     </LinearLayout>
 
 
@@ -28,38 +37,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/txt_tSelectActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tSelectActivity"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:singleLine="true"
+            android:gravity="center_horizontal" />
 
         <RadioGroup
             android:id="@+id/radGroup_ActStatus"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp">
+            android:orientation='horizontal'>
 
             <RadioButton
                 android:id="@+id/rad_ActStatusWalking"
-                android:layout_width="wrap_content"
+                android:layout_weight=".33"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/walking"
                 android:onClick="activityChanged"/>
 
+            <!--
             <RadioButton
                 android:id="@+id/rad_ActStatusQueueing"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="wrap_content
                 android:text="@string/queueing"
+                android:onClick="activityChanged"/>
+                -->
+
+            <RadioButton
+                android:id="@+id/rad_ActStatusQueueStep"
+                android:layout_weight=".33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/queueStep"
                 android:onClick="activityChanged"/>
 
             <RadioButton
                 android:id="@+id/rad_ActStatusIdle"
-                android:layout_width="wrap_content"
+                android:layout_weight=".33"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/idle"
                 android:checked="true"
@@ -136,12 +159,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_dbExport"
+            android:id="@+id/btn_AccelExportAct"
             android:layout_weight=".5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="dbExport"
-            android:text="@string/dbExport" />
+            android:onClick="accelExportAct"
+            android:text="@string/accelExportAct" />
 
     </LinearLayout>
 
@@ -155,7 +178,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/tClassification"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:singleLine="true"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/txt_Classification"

@@ -77,9 +77,16 @@ public class MainActivity extends ActionBarActivity {
                     selectedMotionType = MotionType.IDLE;
                 }
                 break;
+            /*
             case R.id.rad_ActStatusQueueing:
                 if (checked) {
                     selectedMotionType = MotionType.QUEUEING;
+                }
+                break;
+            */
+            case R.id.rad_ActStatusQueueStep:
+                if (checked) {
+                    selectedMotionType = MotionType.QUEUESTEP;
                 }
                 break;
             case R.id.rad_ActStatusWalking:
@@ -120,11 +127,13 @@ public class MainActivity extends ActionBarActivity {
         this.showAccelData();
     }
 
-    public void dbExport(View view){
-        dbAPI.exportTableAccelAct();
+    public void accelExportBias(View view){
         dbAPI.exportTableAccelBias();
     }
 
+    public void accelExportAct(View view){
+        dbAPI.exportTableAccelAct();
+    }
 
 
     //test function to display data on screen from database

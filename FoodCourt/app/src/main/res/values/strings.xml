@@ -9,6 +9,7 @@
     <string name="walking">Walking</string>
     <string name="queueing">Queueing</string>
     <string name="idle">Idle</string>
+    <string name="queueStep">Queue Step</string>
 
     <!-- Actions -->
     <string name="accelStart">Start Accel</string>
@@ -22,7 +23,8 @@
     <!-- database -->
     <string name="dbReset">Reset DB</string>
     <string name="dbLastData">Last Record</string>
-    <string name="dbExport">Export DB</string>
+    <string name="accelExportAct">Export Activity</string>
+    <string name="accelExportBias">Export Bias</string>
 
 
 </resources>
