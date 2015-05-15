@@ -68,8 +68,6 @@ More datasets! We need more! And a list for each dataset/run to determine amount
 
 Tool to concat datasets. 
 
-Hessel: PDF-fitting. All current matlab tools compute histograms and pdfs using the deprecated 'hist'-function. The get better estimates (for example for the [compPdf](compPdf) function), it might be better to use a fit on the (differently calculated?) histogram and use this fit compare different windowsizes. The function [alldistfit](http://www.mathworks.com/matlabcentral/fileexchange/34943-fit-all-valid-parametric-probability-distributions-to-data) at matlab exchange (referenced from [this](http://blogs.mathworks.com/pick/2012/02/10/finding-the-best/) article) might be a good start. 
-
 NASC: update code to select step-frequency. Current results of NASC show the maximum auto correlation for all t-values for each sample, which might introduce a lot of error. We might need to introduce/design an extra functions which tries to figure out the stepping frequency `t`, which than (just as in the paper) can be used to decrease the interval at which NASC is calculated: going from `40:100`, to `t-10:t+10`. This function eventually needs to be implemented into the app
 
 NASC: Figuring out a proper way to train NASC. Each sequence of 'walk' samples should be interpreted as a seperate sequence. if multiple (different) walk-sequences are 'concataned' (as is done in the current implementation) we get a region where the frequencies do not overlap and will mess op the results.
@@ -102,11 +100,8 @@ App-upgrade: feature extractation of recording data
 ### 2.2 - After May 13th 2015
 (will be regulary updated)
 
-
-
-
-
-
+#### 2.2.1 PDF-fitting
+Results and progress on pdf-fitting of accelerometer data (for motion classification) can be found in the [pdfcomparision.md](pdfcomparision.md) report. Currently the software is functioning, but requires more datasets for proper testing.
 
 
 ## 4 - Final design

@@ -1,5 +1,5 @@
- function [hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, run, m, signal, binacc)
-    % INPUT:
+function [stdi, stds, stdw] = calcStd(wsize, run, m, signal)
+ % INPUT:
     % wsize     = number of samples used in a moving window
     % run       = annotation of run-number           nx1
     % m         = type of motion of accel-sample     nx1
@@ -19,9 +19,9 @@
     maxrun = max(run);
 
     %init values
-    std_idle = 0; 
-    std_walk = 0;
-    std_step = 0;
+    stdi = 0; %zeros(sum(m==1),1); 
+    stdw = 0; %zeros(sum(m==3),1); 
+    stds = 0; %zeros(sum(m==4),1); 
 
     % for each run
     for r=minrun:maxrun
@@ -46,23 +46,15 @@
                 mtype = mt(idx); 
                 % add std to correct array (walk/idle/step)
                 if (mtype == 1) %idle
-                    std_idle(end+1) = std_dwindow;
+                    stdi(end+1) = std_dwindow;
                 end
                 if (mtype == 3) %walk
-                    std_walk(end+1) = std_dwindow;
+                    stdw(end+1) = std_dwindow;
                 end
                 if (mtype == 4) %step
-                    std_step(end+1) = std_dwindow;
+                    stds(end+1) = std_dwindow;
                 end
             end
         end
     end
-
-    %mutiplication by 10 is done for bin-purposes, 
-    %   to get the histogram accurate at 0.1
-
-    % get normalised histograms
-    [hi, xi] = getNormHist(round(std_idle*binacc));
-    [hw, xw] = getNormHist(round(std_walk*binacc));
-    [hs, xs] = getNormHist(round(std_step*binacc));
 end

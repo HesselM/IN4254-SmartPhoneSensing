@@ -8,7 +8,7 @@
 - - [data-functions](#data-functions)
 - - - [getNormHist(signal)](#getnormhistsignal)
 - - - [calcPdf(m, signal, binacc)](#calcpdfm-signal-binacc)
-- - - [calcPdfStd(wsize, r, m, signal, binacc)](#calcpdfstdwsize-r-m-signal-binacc)
+- - - [calcStd(wsize, r, m, signal, binacc)](#calcstdwsize-r-m-signal-binacc)
 - - - [compPdf(hi, xi, hs, xs, hw, xw)](#comppdfhi-xi-hs-xs-hw-xw)
 - - - [NASC(mmin, mmax, tmin, tmax, signal)](#nascmmin-mmax-tmin-tmax-signal)
 - - [plot-functions](#plot-functions)
@@ -16,6 +16,9 @@
 - - [test-functions](#test-functions)
 - - - [testNASC](#testnasc)
 - - - [testPdfStd(wsize, r, m, signal)](#testpdfstdwsize-r-m-signal)
+- - - [calcStdMisProb](#calcstdmisprobwsize-k-k-r-m-signal)
+- - - [testPdfFit](#testpdffitwsize-r-m-signal)
+
 
 #Functions
 
@@ -131,27 +134,22 @@ OUTPUT
 
 This function creates a pdf of a given signal. 
 
-### calcPdfStd(wsize, r, m, signal, binacc)
-!!-TO BE UPDATED: REMOVE CATEGORISATION AND ADD DISTRIBUTION FIT--!!
+### calcStd(wsize, r, m, signal, binacc)
 ```
-[hi, xi, hs, xs, hw, xw] = calcPdfStd(wsize, r, m, signal, binacc)
+[stdi, stds, stdw] = calcStd(wsize, r, m, signal, binacc)
 ```
 INPUT
 - wsize  = number which specifies the width of the sliding window to calculate the std over.
 - r      = [1xM] run id vector of imported log
 - m      = [1xM] annotated motion type of each value in signal
 - signal = [1xM] vector to generate PDF from. 
-- binacc = accuracy factor 'f', see [getNormHist](#getnormhistsignal)
 
 OUTPUT
-- hi = [1xN] histogram values (pdf) of the std of 'idle'
-- xi = [1xN] x-values of histogram of the std of  'idle'
-- hs = [1xO] histogram values (pdf) of the std of 'step'
-- xs = [1xO] x-values of histogram of the std of 'step'
-- hw = [1xP] histogram values (pdf) of the std of 'step'
-- xw = [1xP] x-values of histogram of  the std of 'walk'
+- stdi = [1xN] standard deviation of all `idle` samples, given a window size `wsize`
+- stds = [1xO] standard deviation of all `step` samples, given a window size `wsize`
+- stdw = [1xP] standard deviation of all `walk` samples, given a window size `wsize`
 
-This function calculates the standard deviation of an sample `n` in `signal` using an sliding window of `wsize` samples. The samples used for the standard deviation are chosen to be at position `n:n+wsize`. 
+This function calculates the standard deviation of a sample `n` in `signal` using an sliding window of `wsize` samples. The samples used for the standard deviation are chosen to be at position `n:n+wsize`. 
 
 ### compPdf(hi, xi, hs, xs, hw, xw)
 ```
@@ -221,6 +219,8 @@ still buggy. Needs to be defined as function. Can be used to test NSAC on differ
 
 
 ### testPdfStd(wsize, r, m, signal)
+DEPRECATED. NEW VERSION IS [`calcStdMisProb.m`](../matlab/calcStdMisProb/m)
+
 ```
 pmatrix = testPdfStd(wsize, r, m, signal)
 ```
@@ -249,3 +249,45 @@ wsize      a         b         c         d         e         f         g        
 
 ```
 
+
+### calcStdMisProb(wsize, K, k, r, m, signal)
+```
+pmatrix = calcStdMisProb(wsize, K, k, r, m, signal)
+```
+INPUT:
+- wsize = [1xN] N different windowsizes to test the [calcPdfStd](#calcpdfstdwsize-r-m-signal-binacc) function
+- K     = Maximum value for the x-axis to used for probability calculation
+- k     = step value for the x-axis
+- r     = [1xM] run id vector of imported log
+- m     = [1xM] annotated motion type of imported log (idle=1, walk=3, step=4)
+- sig   = [1xM] signal for pdf
+OUTPUT:
+- pmatrix = [Nx10] each row contains the wsize used to calculate the probability of misclassification of the pdfstd and the 9 probabilities calculated by [compPdf](#comppdfhi-xi-hs-xs-hw-xw)
+
+Uses an signal to generate a data fit using a generalized exterme value distribution. This distribution is discretized and used to calculte the probabilit of misclassification of different motiontypes.
+
+Example:
+```
+calcStdMisProb([10 20 30], 2, 0.01, run, motiontype, magnitude)
+
+ans =
+
+10.0000    0.7310    0.2228    0.0462    0.2228    0.5186    0.2586    0.0462    0.2586    0.6951
+20.0000    0.7779    0.1893    0.0328    0.1893    0.5696    0.2411    0.0328    0.2411    0.7261
+30.0000    0.7775    0.1944    0.0280    0.1944    0.5657    0.2399    0.0280    0.2399    0.7321
+```
+
+
+
+### testPdfFit(wsize, r, m, signal)
+```
+testPdfFit(wsize, r, m, signal)
+```
+
+INPUT
+- wsize = [1xN] N different windowsizes to test the [calcPdfStd](#calcpdfstdwsize-r-m-signal-binacc) function
+- r     = [1xM] run id vector of imported log
+- m     = [1xM] annotated motion type of imported log (idle=1, walk=3, step=4)
+- sig   = [1xM] signal for pdf
+
+Uses the function [`allfitdist`](allfitdist.m) to test different windowsizes for what distribution is the best fit on the data.
