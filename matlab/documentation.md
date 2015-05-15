@@ -246,3 +246,45 @@ wsize      a         b         c         d         e         f         g        
 
 ```
 
+
+### calcStdMisProb(wsize, K, k, r, m, signal)
+```
+pmatrix = calcStdMisProb(wsize, K, k, r, m, signal)
+```
+INPUT:
+- wsize = [1xN] N different windowsizes to test the [calcPdfStd](#calcpdfstdwsize-r-m-signal-binacc) function
+- K     = Maximum value for the x-axis to used for probability calculation
+- k     = step value for the x-axis
+- r     = [1xM] run id vector of imported log
+- m     = [1xM] annotated motion type of imported log (idle=1, walk=3, step=4)
+- sig   = [1xM] signal for pdf
+OUTPUT:
+- pmatrix = [Nx10] each row contains the wsize used to calculate the probability of misclassification of the pdfstd and the 9 probabilities calculated by [compPdf](#comppdfhi-xi-hs-xs-hw-xw)
+
+Uses an signal to generate a data fit using a generalized exterme value distribution. This distribution is discretized and used to calculte the probabilit of misclassification of different motiontypes.
+
+Example:
+```
+calcStdMisProb([10 20 30], 2, 0.01, run, motiontype, magnitude)
+
+ans =
+
+10.0000    0.7310    0.2228    0.0462    0.2228    0.5186    0.2586    0.0462    0.2586    0.6951
+20.0000    0.7779    0.1893    0.0328    0.1893    0.5696    0.2411    0.0328    0.2411    0.7261
+30.0000    0.7775    0.1944    0.0280    0.1944    0.5657    0.2399    0.0280    0.2399    0.7321
+```
+
+
+
+### testPdfFit(wsize, r, m, signal)
+```
+testPdfFit(wsize, r, m, signal)
+```
+
+INPUT
+- wsize = [1xN] N different windowsizes to test the [calcPdfStd](#calcpdfstdwsize-r-m-signal-binacc) function
+- r     = [1xM] run id vector of imported log
+- m     = [1xM] annotated motion type of imported log (idle=1, walk=3, step=4)
+- sig   = [1xM] signal for pdf
+
+Uses the function [`allfitdist`](allfitdist.m) to test different windowsizes for what distribution is the best fit on the data.
