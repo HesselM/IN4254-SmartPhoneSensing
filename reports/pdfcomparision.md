@@ -7,10 +7,10 @@ Different windows-sizes result in different pdfs of. The figure below shows seve
 
 
 ## data fitting
-Since we are not able to observe all possibile idle, walk and step motions, the generated pdfs might miss on some data. To smoothen our results and overcome the issuing of missing data, we do a fit on the pdf. As can be observerd from the previous images, an gaussion might not fit the bill, hence we made used of a function developed by Mike Sheppard: [`alldistfit`](http://www.mathworks.com/matlabcentral/fileexchange/34943-fit-all-valid-parametric-probability-distributions-to-data).
+Since we are not able to observe all possibile idle, walk and step motions, the generated pdfs might miss on some data. To smoothen our results and overcome the issuing of missing data, we do a fit on the pdf. As can be observerd from the previous images, an gaussion might not fit the bill, hence we made used of a function developed by Mike Sheppard: [`allfitdist`](http://www.mathworks.com/matlabcentral/fileexchange/34943-fit-all-valid-parametric-probability-distributions-to-data).
 
 
-The `alldistfit` funtion tries to fit different distributions, and returns a vector of the the top-7 best fits. We have tested several (11) windowsizes: 10, 20, 30, 40, 50, 75, 100, 125, 150, 175 and 200 samples, ranging from 1/5th of a second to a window of 4 seconds. Each windowsize genereates 3 fits, one for each activity: walking, idle and step. In total, 30 fits are generated. In the table below the cumaltative top 3 fit of each sample is shown.
+The `allfitdist` funtion tries to fit different distributions, and returns a vector of the the top-7 best fits. We have tested several (11) windowsizes: 10, 20, 30, 40, 50, 75, 100, 125, 150, 175 and 200 samples, ranging from 1/5th of a second to a window of 4 seconds. Each windowsize genereates 3 fits, one for each activity: walking, idle and step. In total, 30 fits are generated. In the table below the cumaltative top 3 fit of each sample is shown.
 
 | distribution                | 1  | 2  | 3  | 
 | --------------------------- | -- | -- | -- |
