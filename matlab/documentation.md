@@ -16,6 +16,9 @@
 - - [test-functions](#test-functions)
 - - - [testNASC](#testnasc)
 - - - [testPdfStd(wsize, r, m, signal)](#testpdfstdwsize-r-m-signal)
+- - - [calcStdMisProb](#calcstdmisprobwsize-k-k-r-m-signal)
+- - - [testPdfFit](#testpdffitwsize-r-m-signal)
+
 
 #Functions
 
