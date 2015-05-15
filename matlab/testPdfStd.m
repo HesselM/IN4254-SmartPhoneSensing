@@ -16,9 +16,9 @@ function r = testPdfStdw(wsize, run, m, signal, binacc)
     [hi, xi] = getNormHist(round(stdi*binacc));
     [hw, xw] = getNormHist(round(stdw*binacc));
     [hs, xs] = getNormHist(round(stds*binacc));
-    %xi = xi / binacc;
-    %xw = xw / binacc;
-    %xs = xs / binacc;
+    xi = xi / binacc;
+    xw = xw / binacc;
+    xs = xs / binacc;
     
     %compare pdf
     m = compPdf(hi, xi, hs, xs, hw, xw);
