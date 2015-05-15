@@ -56,4 +56,28 @@ Ideally we want to pick a windowsize where the probability of misclassification 
 Just as with the distribution fit test, the following windowsizes are used: 10, 20, 30, 40, 50, 75, 100, 125, 150, 175 and 200 samples, ranging from 1/5th of a second to a window of 4 seconds.
 
 
+RESULTS FOLLOW WHEN ENOUGH DATASETS ARE COLLECTED.
+PRELIMINARIY RESULTS:
 
+```
+file = '../logs/log_accelActivity1431006940761_corrected.txt'
+sum(motiontype==1) = 8532 % idle samples
+sum(motiontype==3) = 6843 % walk samples
+sum(motiontype==4) = 3116 % step samples
+
+calcStdMisProb([10 20 30 40 50 75 100 125 150 175 200], 2, 0.01, run, motiontype, magnitude)
+
+ans =
+%wsize P(T=1|T=1) P(T=2|T=1) P(T=3|T=1) P(T=1|T=2) P(T=2|T=2) P(T=3|T=2) P(T=1|T=3) P(T=2|T=3) P(T=3|T=3)
+10.0000    0.7310    0.2228    0.0462    0.2228    0.5186    0.2586    0.0462    0.2586    0.6951
+20.0000    0.7779    0.1893    0.0328    0.1893    0.5696    0.2411    0.0328    0.2411    0.7261
+30.0000    0.7775    0.1944    0.0280    0.1944    0.5657    0.2399    0.0280    0.2399    0.7321
+40.0000    0.7607    0.2074    0.0319    0.2074    0.5420    0.2506    0.0319    0.2506    0.7175
+50.0000    0.7435    0.2188    0.0377    0.2188    0.5302    0.2510    0.0377    0.2510    0.7113
+75.0000    0.6758    0.2656    0.0586    0.2656    0.5078    0.2266    0.0586    0.2266    0.7148
+100.0000    0.6081    0.3092    0.0827    0.3092    0.4936    0.1972    0.0827    0.1972    0.7201
+125.0000    0.5535    0.3404    0.1061    0.3404    0.4865    0.1730    0.1061    0.1730    0.7209
+150.0000    0.5062    0.3657    0.1281    0.3657    0.4827    0.1515    0.1281    0.1515    0.7204
+175.0000    0.4428    0.4087    0.1485    0.4087    0.4647    0.1266    0.1485    0.1266    0.7249
+200.0000    0.4152    0.4298    0.1549    0.4298    0.4680    0.1022    0.1549    0.1022    0.7429
+```
