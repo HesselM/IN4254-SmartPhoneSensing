@@ -1,8 +1,8 @@
 # Index:
-[Data fitting](#data-fitting)
-[Probability of (mis) classification](#probability-of-mis-classification)
-[Results](#results)
-[Conclusion](#conclusion)
+- [Data fitting](#data-fitting)
+- [Probability of (mis) classification](#probability-of-mis-classification)
+- [Results](#results)
+- [Conclusion](#conclusion)
 
 # Feature selection
 
