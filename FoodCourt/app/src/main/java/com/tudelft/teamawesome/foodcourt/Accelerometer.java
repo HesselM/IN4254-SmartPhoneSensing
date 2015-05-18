@@ -120,9 +120,14 @@ public class Accelerometer implements SensorEventListener {
     }
 
 
+    //paus logging of data
+    public void pause(){
+        logdata    = false;
+    }
+
     //stop accelerometer
     public void stop() {
-        if (listening) {
+        //if (listening) {
             sm.unregisterListener(this);
 
             //reset flags
@@ -130,8 +135,20 @@ public class Accelerometer implements SensorEventListener {
             logdata    = false;
             filterDone = false;
             collectedSamples = 0;
-        }
+        //}
     }
+
+    public String getStatus() {
+        String status = "";
+        status += "Lis:" + ((listening) ? 1 : 0);
+        status += " Log:" + ((logdata) ? 1 : 0);
+        status += " Cal:" + ((calibrate) ? 1 : 0);
+        status += " Fil:" + ((filterDone) ? 1 : 0);
+        status += " Col:" + collectedSamples;
+        return status;
+    }
+
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy){
@@ -161,8 +178,8 @@ public class Accelerometer implements SensorEventListener {
                 //check if we reached our upperbound
                 // if, stop and do calibration
                 if (this.collectedSamples >= collectedSamples_upperBound){
-                    //stop/unregister accelerometer
-                    this.stop();
+                    //pause accelerometer
+                    this.pause();
                     //calculate bias..
                     accelBias = dbAPI.calculateAccelBias(collectedSamples_lowerBound);
                     //signal that calibration is done
