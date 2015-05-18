@@ -49,7 +49,7 @@ function [y,x] = discNormGev(data, K, k)
     y = gevpdf(x,pk,ps,pm);
                        
     %normalise
-    y = y / sum(x*k);
+    y = y / sum(y*k);
 end
 
 function plotData(w, K, dgev, hi, xi, hs, xs, hw, xw)
@@ -78,10 +78,16 @@ function plotData(w, K, dgev, hi, xi, hs, xs, hw, xw)
 
     %set x-axis limit
     xlim([0 K]);
+    ylim([0 10]);
     
     %set legend
     legend('idle','step', 'walk','idle (gev)','step (gev)', 'walk (gev)');
-       
+    
+    %set title
+    ftitle = 'normalised pdf of std(magnitude), dx=';
+    ftitle = strcat(ftitle, num2str(mean(diff(xi)),1));
+    title(ftitle, 'FontWeight','bold')
+    
     % Export figure
     addpath export_fig
     figname = strcat('results/std_w', num2str(w));
