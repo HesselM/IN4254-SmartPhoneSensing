@@ -12,8 +12,9 @@
     <string name="queueStep">Queue Step</string>
 
     <!-- Actions -->
-    <string name="accelStart">Start Accel</string>
-    <string name="accelStop">Stop Accel</string>
+    <string name="accelStart">Start</string>
+    <string name="accelPause">Pause</string>
+    <string name="accelStop">Stop</string>
     <string name="accelCalibrate">Calibrate Accel</string>
 
     <!-- Misc -->

@@ -111,6 +111,11 @@ public class MainActivity extends ActionBarActivity {
         this.showAccelData();
     }
 
+    public void accelPause(View view) {
+        accelerometer.pause();
+        this.showAccelData();
+    }
+
     public void accelStop(View view) {
         accelerometer.stop();
         this.showAccelData();
@@ -140,9 +145,10 @@ public class MainActivity extends ActionBarActivity {
     public void showAccelData(){
         TextView txtAccel = (TextView) findViewById(R.id.txt_Accel);
         CharSequence text;
-        text = "max run:" + dbAPI.getMaxRun() + "/" + accelerometer.getRun() + "\n";
-        text = text + "records:" + dbAPI.getRecordCount() + "\n";
-        text = text + "motionType:" + selectedMotionType.getValue() + "\n";
+        text = "max run:" + dbAPI.getMaxRun() + "/" + accelerometer.getRun();
+        text = text + "- records:" + dbAPI.getRecordCount();
+        text = text + "- motionType:" + selectedMotionType.getValue() + "\n";
+        text = text + accelerometer.getStatus() + "\n";
         txtAccel.setText(text);
     }
 }
