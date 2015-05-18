@@ -47,9 +47,9 @@ function [y,x] = discNormGev(data, K, k)
 
     %get y values
     y = gevpdf(x,pk,ps,pm);
-    
+                       
     %normalise
-    y = y / sum(y*k);
+    y = y / sum(x*k);
 end
 
 function plotData(w, K, dgev, hi, xi, hs, xs, hw, xw)
@@ -61,7 +61,7 @@ function plotData(w, K, dgev, hi, xi, hs, xs, hw, xw)
     xw_gev = dgev(6,:);
 
     %clear figure
-    figure(w);clf;hold on;
+    fig = figure(w);clf;hold on;
     
     %setup histograms
     bi = bar(xi, hi, 'r', 'stacked');
@@ -81,4 +81,15 @@ function plotData(w, K, dgev, hi, xi, hs, xs, hw, xw)
     
     %set legend
     legend('idle','step', 'walk','idle (gev)','step (gev)', 'walk (gev)');
+       
+    % Export figure
+    addpath export_fig
+    figname = strcat('results/std_w', num2str(w));
+    set(gcf, 'Color', 'white'); % white bckgr
+    export_fig( fig, ...        % figure handle
+                figname,...  % name of output file without extension
+                '-painters', ... % renderer
+                '-png', ...      % file format
+                '-r144' );        % resolution in dpi
+     rmpath export_fig
 end
