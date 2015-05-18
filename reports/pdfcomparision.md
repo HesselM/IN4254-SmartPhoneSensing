@@ -89,15 +89,15 @@ ans =
 ```
 
 The pdfs and approximations are shown below:
-![](figs/std_w10.png)
-![](figs/std_w20.png)
-![](figs/std_w30.png)
-![](figs/std_w40.png)
-![](figs/std_w50.png)
-![](figs/std_w75.png)
-![](figs/std_w100.png)
-![](figs/std_w125.png)
-![](figs/std_w150.png)
-![](figs/std_w175.png)
-![](figs/std_w200.png)
+![](figs/std_w10.png|width=150px)
+![](figs/std_w20.png|width=150px)
+![](figs/std_w30.png|width=150px)
+![](figs/std_w40.png|width=150px)
+![](figs/std_w50.png|width=150px)
+![](figs/std_w75.png|width=150px)
+![](figs/std_w100.png|width=150px)
+![](figs/std_w125.png|width=150px)
+![](figs/std_w150.png|width=150px)
+![](figs/std_w175.png|width=150px)
+![](figs/std_w200.png|width=150px)
 
