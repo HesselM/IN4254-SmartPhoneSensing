@@ -1,3 +1,9 @@
+# Index:
+[Data fitting](#data-fitting)
+[Probability of (mis) classification](#probability-of-mis-classification)
+[Results](#results)
+[Conclusion](#conclusion)
+
 # Feature selection
 
 One of the most challenging tasks is to select the correct features. While a trail-and-error approach might give nice results, we believe a deeper understanding of the data might result in better classification. As indicated by [A. Rai et. al. ](http://research.microsoft.com/pubs/166309/com273-chintalapudi.pdf), the mean and standard deviation of a signal gives good insights of the type of motion. One important question remains: what window-size should be taken to calculate the standard deviation on? 
