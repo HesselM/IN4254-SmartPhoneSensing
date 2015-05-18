@@ -90,14 +90,32 @@ ans =
 
 The pdfs and approximations are shown below:
 
-<img src="figs/std_w10.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=10" width="300px">
-<img src="figs/std_w20.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=20" width="300px">
-<img src="figs/std_w30.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=30" width="300px">
-<img src="figs/std_w40.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=40" width="300px">
-<img src="figs/std_w50.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=50" width="300px">
-<img src="figs/std_w75.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=75" width="300px">
-<img src="figs/std_w100.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=100" width="300px">
-<img src="figs/std_w125.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=125" width="300px">
-<img src="figs/std_w150.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=150" width="300px">
-<img src="figs/std_w175.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=175" width="300px">
-<img src="figs/std_w200.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=200" width="300px">
+<img src="figs/std_w10.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=10" width="400px">
+<img src="figs/std_w20.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=20" width="400px">
+<img src="figs/std_w30.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=30" width="400px">
+<img src="figs/std_w40.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=40" width="400px">
+<img src="figs/std_w50.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=50" width="400px">
+<img src="figs/std_w75.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=75" width="400px">
+<img src="figs/std_w100.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=100" width="400px">
+<img src="figs/std_w125.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=125" width="400px">
+<img src="figs/std_w150.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=150" width="400px">
+<img src="figs/std_w175.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=175" width="400px">
+<img src="figs/std_w200.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=200" width="400px">
+
+
+From this data can be observed that a longer window (averaging more samples) does not tend to result in lower misclassification probabilities. The figures shows also that a longer windowsize lead to a poorer data fit. It also shows that with longer windowsizes, the pdfs are becoming more similiar, hence harder to correctly classify. 
+
+The calculated probabilities of correct classification is the higest for each pdf at a windowsize of 30 samples. The difference with 20 and 40 samples is not large, hence these windowsizes might also be tested. Using a window size of 30 samples we have approximetly:
+- a 70% chance of correctly classifying idle
+- a 52% chance of correctly classifying step
+- a 68% chance of correctly classifying walk. 
+- a 23% change of classifing idle as step or visa versa
+- a 7% change of classifing idle as walk or visa versa
+- a 25% change of classifing step as walk or visa versa
+
+A windowsize of 200 samples (4 seconds) might not be able to classify step and idle correctly (of which the probaility of correct classification drops to 40%), but it might improve the ability of kNN to differentiate between 'step' and walk', as the probability of missclassification drops to 15%.
+
+## Conclusion
+
+A windowsize 'wsize' of 30 samples (0.6 seconds) for the standard deviation gives the highest probabilities of correct classification. The difference with 'wsize' = 20 or 40, is small, hence these sizes might be tested.
+Using 'wsize'=30 might result in misclassifcation of 'step' and 'walk' in 25% of all cases. This probability drops to 15% percen when 'wsize'=200 is used. Hence, the combination of 'wsize'=30 and 200 might provide good cues for kNN for classification.
