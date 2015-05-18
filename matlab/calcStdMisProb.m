@@ -84,8 +84,12 @@ function plotData(w, K, dgev, hi, xi, hs, xs, hw, xw)
     legend('idle','step', 'walk','idle (gev)','step (gev)', 'walk (gev)');
     
     %set title
-    ftitle = 'normalised pdf of std(magnitude), dx=';
+    ftitle = 'normalised pdf of std(magnitude)';
+    ftitle = strcat(ftitle, ' dx=');
     ftitle = strcat(ftitle, num2str(mean(diff(xi)),1));
+    ftitle = strcat(ftitle, ' wsize=');
+    ftitle = strcat(ftitle, num2str(w));
+
     title(ftitle, 'FontWeight','bold')
     
     % Export figure
