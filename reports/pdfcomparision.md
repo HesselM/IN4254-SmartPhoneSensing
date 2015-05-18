@@ -89,7 +89,7 @@ ans =
 ```
 
 The pdfs and approximations are shown below:
-<img src="figs/std_w10.png" alt="normaliszed pdf of std(magnitude)" style="width:150px;">
+<img src="figs/std_w10.png" alt="normaliszed pdf of std(magnitude)" width="150px">
 ![](figs/std_w10.png|width=150px)
 ![](figs/std_w20.png|width=150px)
 ![](figs/std_w30.png|width=150px)
