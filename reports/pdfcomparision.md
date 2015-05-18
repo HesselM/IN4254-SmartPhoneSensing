@@ -89,16 +89,15 @@ ans =
 ```
 
 The pdfs and approximations are shown below:
-<img src="figs/std_w10.png" alt="normaliszed pdf of std(magnitude)" width="150px">
-![](figs/std_w10.png|width=150px)
-![](figs/std_w20.png|width=150px)
-![](figs/std_w30.png|width=150px)
-![](figs/std_w40.png|width=150px)
-![](figs/std_w50.png|width=150px)
-![](figs/std_w75.png|width=150px)
-![](figs/std_w100.png|width=150px)
-![](figs/std_w125.png|width=150px)
-![](figs/std_w150.png|width=150px)
-![](figs/std_w175.png|width=150px)
-![](figs/std_w200.png|width=150px)
 
+<img src="figs/std_w10.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=10" width="300px">
+<img src="figs/std_w20.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=20" width="300px">
+<img src="figs/std_w30.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=30" width="300px">
+<img src="figs/std_w40.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=40" width="300px">
+<img src="figs/std_w50.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=50" width="300px">
+<img src="figs/std_w75.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=75" width="300px">
+<img src="figs/std_w100.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=100" width="300px">
+<img src="figs/std_w125.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=125" width="300px">
+<img src="figs/std_w150.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=150" width="300px">
+<img src="figs/std_w175.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=175" width="300px">
+<img src="figs/std_w200.png" alt="normaliszed pdf of std(magnitude), dx=0.01, wsize=200" width="300px">
