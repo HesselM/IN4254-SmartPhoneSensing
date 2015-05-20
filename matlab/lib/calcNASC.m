@@ -1,37 +1,58 @@
 % J.Miog
 % H.van der Molen
 
-function [cor, hist_y, hist_x] = NASC(mmin, mmax, tmin, tmax, signal)
+function [mcor, cor, rnew, mnew] = calcNASC(tmin, tmax, run, m, signal)
     % INPUT
-    % mmin   = start index of sequence of samples to apply NASC on
-    % mmax   = end index of sequence of samples to apply NASC on
     % tmin   = minimal windowsize to test for correlation
     % tmax   = maximal windowsize to test for correlation
-    % signal = signal to check for NASC 
+    % run    = [1xN] annotation of run-number 
+    % m      = [1xN] type of motion of signal
+    % signal = [1xN] signal to check for NASC 
     % OUTPUT
-    % cor    = correlation for all samples between mmin->mmax
-    % hist_y = pdf of correlation
-    % hist_x = x-axis values for pdf
-
-    %correct max for tmax
-    mmax = mmax - 2*tmax;
-
-    %init correlation array
-    cor = zeros(mmax-mmin+1,tmax-tmin+1);
-
-    %detemine correlation
-    for t = tmin:tmax
-        cor(:,t-tmin+1) = autocorrelation(signal, mmin:mmax, t);
-    end
+    % mcor   = [1xN] maximum correlation for all samples between mmin->mmax
+    % cor    = [tmax-tmin x N] correlation for all samples between mmin->mmax
+    % rnew   = run-annotation of mcor
+    % mnew   = motion-annotation of mnew
     
-    %get maximum correlation for each sample
-    cor = max(cor')';
+    %minimum and maximum run-number
+    minrun = min(run);
+    maxrun = max(run);
 
-    %get normalised histogram
-    [hist_y, hist_x] = getNormHist(round(cor*10));
+    cor = [];
+    mcor = [];
+    rnew = [];
+    mnew = [];
 
-    %correct x for multiplication/int-casting
-    hist_x = hist_x ./ 10;
+    for r=minrun:maxrun
+        % get signal of run
+        sig  = signal(run==r);
+        msig = m(run==r);
+        rsig = run(run==r);
+
+        %correct max for tmax
+        mmax = size(sig, 1);
+        mmax = mmax - 2*tmax;
+
+        %check if there are enough samples in sig
+        if (mmax > 1)
+            %init correlation array
+            sig_cor = zeros(mmax,tmax-tmin+1);
+
+            %detemine correlation
+            for t = tmin:tmax
+                sig_cor(:,t-tmin+1) = autocorrelation(sig, 1:mmax, t);
+            end
+
+            %get maximum correlation for each sample
+            sig_mcor = max(sig_cor')';
+                           
+            %attach to results
+            cor  = [cor ; sig_cor]; 
+            mcor = [mcor; sig_mcor];
+            rnew = [rnew; rsig(1:mmax)];
+            mnew = [mnew; msig(1:mmax)];
+        end
+    end
 end
 
 
