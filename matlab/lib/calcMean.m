@@ -1,27 +1,18 @@
-function [stdi, stds, stdw] = calcStd(wsize, run, m, signal)
+function [meani, means, meanw] = calcMean(wsize, run, m, signal)
  % INPUT:
     % wsize     = number of samples used in a moving window
     % run       = annotation of run-number           nx1
     % m         = type of motion of accel-sample     nx1
-    % signal    = signal used for the std            nx1
-    % binacc    = multiplication value for bin accuracy (1x1)
-    %                   accuracy = 1/binacc
-    % OUTPUT:
-    % hi = histogram values of 'idle'
-    % xi = x-values of histogram of 'idle'
-    % hs = histogram values of 'step'
-    % xs = x-values of histogram of 'step'
-    % hw = histogram values of 'step'
-    % xw = x-values of histogram of 'walk'
+    % signal    = signal used for the mean           nx1
 
     %minimum and maximum run-number
     minrun = min(run);
     maxrun = max(run);
 
     %init values
-    stdi = 0; %zeros(sum(m==1),1); 
-    stdw = 0; %zeros(sum(m==3),1); 
-    stds = 0; %zeros(sum(m==4),1); 
+    meani = 0; %zeros(sum(m==1),1); 
+    meanw = 0; %zeros(sum(m==3),1); 
+    means = 0; %zeros(sum(m==4),1); 
 
     % for each run
     for r=minrun:maxrun
@@ -40,19 +31,28 @@ function [stdi, stds, stdw] = calcStd(wsize, run, m, signal)
                 dwindow = sig(idx:idx+wsize);
                 
                 %determine std of datawindow
-                std_dwindow = std(dwindow);
+                mean_dwindow = mean(dwindow);
                 
-                %determine std of datawindow
-                mtype = mt(idx); 
+                %determine motiontype of datawindow
+                mwindow = mt(idx:idx+wsize);
+                [y,x] = hist(mwindow,unique(mwindow));
+                maxx  = x(y==max(y));
+                if isempty(maxx)
+                    mtype  = mwindow(1);
+                else
+                    mtype  = maxx(1);
+                end
+
+
                 % add std to correct array (walk/idle/step)
                 if (mtype == 1) %idle
-                    stdi(end+1) = std_dwindow;
+                    meani(end+1) = mean_dwindow;
                 end
                 if (mtype == 3) %walk
-                    stdw(end+1) = std_dwindow;
+                    meanw(end+1) = mean_dwindow;
                 end
                 if (mtype == 4) %step
-                    stds(end+1) = std_dwindow;
+                    means(end+1) = mean_dwindow;
                 end
             end
         end

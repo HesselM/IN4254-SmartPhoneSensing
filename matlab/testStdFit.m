@@ -1,5 +1,9 @@
-function result = testPdfFit(wsize, r, m, signal)
+function result = testStdFit(wsize, r, m, signal)
     result = cell(size(wsize*3,2), 4);
+
+    addpath('lib');
+    addpath('lib_ext');
+
     for w=1:size(wsize,2)
         [stdi, stds, stdw] = calcStd(w, r, m, signal);
         
@@ -23,4 +27,7 @@ function result = testPdfFit(wsize, r, m, signal)
     
     u3=unique(result(:,4),'stable')
     m3=cellfun(@(x) sum(ismember(result(:,4),x)),u3,'un',0)
+
+    rmpath('lib');
+    rmpath('lib_ext');
 end
