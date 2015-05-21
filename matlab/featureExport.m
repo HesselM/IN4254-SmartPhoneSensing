@@ -11,7 +11,7 @@ function featureExport(f)
     fprintf(fileID,'type,std,mean,nasc\n');
     
     %write all entries
-    for i=1:size(t,1)
+    for i=1:size(f,1)
         fprintf(fileID,'%d,%.8f,%.8f,%.8f\n',f(i,1),f(i,2),f(i,3),f(i,4));
     end
     
