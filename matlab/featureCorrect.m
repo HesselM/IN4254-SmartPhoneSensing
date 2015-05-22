@@ -41,4 +41,4 @@ end
 
 %update feature-vector
 fnew(:,  1) = mnew;
-fnew(:,2:4) = f(2:4);
+fnew(:,2:4) = f(:,2:4);
