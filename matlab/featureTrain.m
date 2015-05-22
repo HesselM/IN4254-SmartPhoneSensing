@@ -1,4 +1,4 @@
-function features = featureTrain(run, motiontype, accel, wstd, wmean, tmin, tmax)
+function [features ftype] = featureTrain(run, motiontype, accel, wstd, wmean, tmin, tmax)
     % all input-vectors are equal length
     %
     % 
@@ -22,6 +22,8 @@ function features = featureTrain(run, motiontype, accel, wstd, wmean, tmin, tmax
     minrun = min(run);
     maxrun = max(run);
 
+    ftype = zeros(0,4);
+
     for r=minrun:maxrun
 
         %select data from specified run
@@ -41,6 +43,9 @@ function features = featureTrain(run, motiontype, accel, wstd, wmean, tmin, tmax
 
         if (maxidx > 1)
             for i=1:maxidx
+                if (mod(i,100) == 0)
+                    disp(sprintf('r:%d/%d i:%d/%d',r, maxrun, i,maxidx));
+                end
 
                 %Standard Deviation of magnitude
                 mag_std  =  std(   mag_r(i:i+wstd));
@@ -53,15 +58,31 @@ function features = featureTrain(run, motiontype, accel, wstd, wmean, tmin, tmax
                 magh_type = mode(motion_r(i:i+wmean));
             
                 %NASC
-                cor1 = nasc(i, accel_r(:,1), tmin, tmax);
-                cor2 = nasc(i, accel_r(:,2), tmin, tmax);
-                cor3 = nasc(i, accel_r(:,3), tmin, tmax);
-                cor  = max(cor1, max(cor2, cor3));
-                cor_type = motion_r(i);
-            
+                [cor1,t1] = nasc(i, accel_r(:,1), tmin, tmax);
+                [cor2,t2] = nasc(i, accel_r(:,2), tmin, tmax);
+                [cor3,t3] = nasc(i, accel_r(:,3), tmin, tmax);
+                %cor      = max(cor1, max(cor2, cor3));
+                %cor_type = motion_r(i);
+
+                %maximum correlation
+                cor = cor1;
+                tcor = t1;
+                if (cor2 > cor)
+                    cor  = cor2;
+                    tcor = t2;
+                end
+                if (cor3 > cor)
+                    cor  = cor3;
+                    tcor = t3;
+                end
+                %assign type
+                cor_type = mode(motion_r(i:i+(tcor*2)));
+
                 %select type based on features, 
                 % the type indicated by most features is assumed to be correct.
-                type = mode([cor_type, magh_type, mag_type]);
+                ftype(i,1:3) = [cor_type, magh_type, mag_type];
+                ftype(i,  4) = mode(ftype(i,1:3));
+                type = ftype(i,4);
 
                 features(end+1,:) = [type, mag_std, magh, cor];
             end
@@ -70,8 +91,9 @@ function features = featureTrain(run, motiontype, accel, wstd, wmean, tmin, tmax
 end
 
 
-function cor = nasc(m, a, tmin, tmax)
-    cor = 0;
+function [cor tcor] = nasc(m, a, tmin, tmax)
+    cor  = 0;
+    tcor = 0;
     for t=tmin:tmax
         s = 0;
         mt      = m:m+t-1;
@@ -81,6 +103,12 @@ function cor = nasc(m, a, tmin, tmax)
         for k = 0:t-1
             s = s + ((a(m+k) - meanmt) * (a(m+k+t) - meanmtt));
         end
-        cor = max(cor, s / (t*std(a(mt))*std(a(mtt))));
+
+        chi = s / (t*std(a(mt))*std(a(mtt)));
+
+        if (chi > cor)
+            cor  = chi;
+            tcor = t; 
+        end
     end
 end
