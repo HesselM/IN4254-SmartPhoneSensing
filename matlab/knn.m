@@ -13,7 +13,7 @@ function m = knn(dbfeatures, sfeatures, k)
         
         %get difference in vectors
         df = dbfeatures(:,2:4) - f;
-        df = sum(df.^2,2);  %omit sqrt: time consuming!
+        df = sum(df.^2,2);  %omit sqrt: time consuming and not needed
         
         %sort on smallest distance first
         [sortedValues,sortIndex] = sort(df,'ascend');
