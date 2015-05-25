@@ -266,11 +266,9 @@ Sifting through the results, the following features are selected:
 ```
 std(mag)   = magnitude of accel, standard deviation, wsize=125 (2.25 seconds)
 mean(head) = Heading, mean, not normalised, wsize=200 (4 seconds)
-max(NASC)  = max( NASC(each accel axis) ), t=40:100
       P(T=1|T=1) P(T=2|T=1) P(T=3|T=1) P(T=1|T=2) P(T=2|T=2) P(T=3|T=2) P(T=1|T=3) P(T=2|T=3) P(T=3|T=3)
 std(mag)    0.7874    0.1309    0.0817    0.1309    0.6100    0.2591    0.0817    0.2591    0.6592
 mean(head)  0.7840    0.1738    0.0422    0.1738    0.7038    0.1224    0.0422    0.1224    0.8353
-max(NASC)   0.4253    0.4240    0.1507    0.4240    0.4305    0.1455    0.1507    0.1455    0.7038
 ```
 
 Combining these features, we have a hight probability of correctly classifing the different motions:
