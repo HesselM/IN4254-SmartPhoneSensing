@@ -74,7 +74,7 @@ Ideally these activities should be classified as 'noise': since they do not incl
 ### wsize and offset
 From [pdfComparison](pdfComparison.md) we have determined that the standard deviation of the magnitude with an windowsize of 125 samples (2.5 seconds) and the mean of the heading (200 samples) results in the highest clasification probabilties:
 
-| feature    | P(T=1|T=1) | P(T=2|T=1) | P(T=3|T=1) | P(T=1|T=2) | P(T=2|T=2) | P(T=3|T=2) | P(T=1|T=3) | P(T=2|T=3) | P(T=3|T=3) |
+| feature    | P(T=1!T=1) | P(T=2!T=1) | P(T=3!T=1) | P(T=1!T=2) | P(T=2!T=2) | P(T=3!T=2) | P(T=1!T=3) | P(T=2!T=3) | P(T=3!T=3) |
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 | std(mag)   | 0.7874     | 0.1309     | 0.0817     | 0.1309     | 0.6100     | 0.2591     | 0.0817     | 0.2591     | 0.6592     |
 | mean(head) | 0.7840     | 0.1738     | 0.0422     | 0.1738     | 0.7038     | 0.1224     | 0.0422     | 0.1224     | 0.8353     |
@@ -90,7 +90,7 @@ Using a 'wsize' of 200 and 125, the offset becomes: '(200+125)/4 = 81.25 ~ 81', 
 
 Since the combined motiontype assignment differs from the assignment used to calculate the pdfs, the pdfs change. Below the distributions with an fixed offset of 81 is shown for a standard deviation with 'wsize=125' and a mean of the heading with a 'wsize=200'.
 
-| feature    | P(T=1|T=1) | P(T=2|T=1) | P(T=3|T=1) | P(T=1|T=2) | P(T=2|T=2) | P(T=3|T=2) | P(T=1|T=3) | P(T=2|T=3) | P(T=3|T=3) |
+| feature    | P(T=1!T=1) | P(T=2!T=1) | P(T=3!T=1) | P(T=1!T=2) | P(T=2!T=2) | P(T=3!T=2) | P(T=1!T=3) | P(T=2!T=3) | P(T=3!T=3) |
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 | std(mag)   | 0.7694     | 0.1471     | 0.0835     | 0.1471     | 0.5940     | 0.2590     | 0.0835     | 0.2590     | 0.6575     |
 | mean(head) | 0.6018     | 0.3053     | 0.0928     | 0.3053     | 0.6152     | 0.0794     | 0.0928     | 0.0794     | 0.8277     |
@@ -99,11 +99,11 @@ Compared to the previous table, we see only a small change in the results of the
 
 Clearly, the chosen window size for a single feature, effects all features in the same feature set. By extending the tool developed to calculate the probability for (mis) classification by 1 dimension, we can calculate the probability for mis classificiation when 2 features are used. 
 
-First the pdf's for each type of each feature, using their specified 'wsize' and combined offset, are calculated. For two features, this result in 3 1xN and and 3 1xM vector: for each type a 1xN (pdf of feature 1) and 1xM (pdf of feature 2) vector. These vectors can be combined by multiplication, resulting in 3 NxM matrices: showing the pdf of a motion type over the feature space of 2 features, or mathematically: 'P(X=x|T=i)', the probability of a location in this NxM matrix, given that a certain motion is observed. 
+First the pdf's for each type of each feature, using their specified 'wsize' and combined offset, are calculated. For two features, this result in 3 1xN and and 3 1xM vector: for each type a 1xN (pdf of feature 1) and 1xM (pdf of feature 2) vector. These vectors can be combined by multiplication, resulting in 3 NxM matrices: showing the pdf of a motion type over the feature space of 2 features, or mathematically: 'P(X=x!T=i)', the probability of a location in this NxM matrix, given that a certain motion is observed. 
 
 Using the same calculations described in [pdfComparison](pdfComparison.md), we can compute the probability of mis-classification in the 2D feature set. By comparing the pdf of 'std(mag)' with 'wsize=125', with and without offset, we can see that there is only a small change, indicating that this feature might be relativly stabel regarding the offset. The 'mean(head)' feature however has some large deviation. Below the probabiliy for mis-classifications are shown for 'std(mag)' with 'wsize=125' and 'mean(head)' width 'wsize=[10 20 30 40 50 75 100 125 150 175 200]'
 
-| wsize (std) | wsize (mean) | offset | P(T=1|T=1) | P(T=2|T=1) | P(T=3|T=1) | P(T=1|T=2) | P(T=2|T=2) | P(T=3|T=2) | P(T=1|T=3) | P(T=2|T=3) | P(T=3|T=3) |
+| wsize (std) | wsize (mean) | offset | P(T=1!T=1) | P(T=2!T=1) | P(T=3!T=1) | P(T=1!T=2) | P(T=2!T=2) | P(T=3!T=2) | P(T=1!T=3) | P(T=2!T=3) | P(T=3!T=3) |
 | ----------- | ------------ | ------ |----------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 | 125         | 10           | 34     | 0.7687     | 0.1816     | 0.0496     | 0.1816     | 0.6539     | 0.1645     | 0.0496     | 0.1645     | 0.7859     |
 | 125         | 20           | 36     | 0.7915     | 0.1638     | 0.0447     | 0.1638     | 0.6921     | 0.1441     | 0.0447     | 0.1441     | 0.8112     |
@@ -123,7 +123,7 @@ As can been read in the table, the full feature set has an overall increased pro
 
 From which can derived that a 'wsize' of 125 (or 150) for mean(head) might be the windowsize with the best results. In order to ensure that a different windowsize for 'std(mag)' does not result in better classification, the probabilites for 'wsize = 100' and 'wsize = 150' are shown below:
 
-| wsize (std) | wsize (mean) | offset | P(T=1|T=1) | P(T=2|T=1) | P(T=3|T=1) | P(T=1|T=2) | P(T=2|T=2) | P(T=3|T=2) | P(T=1|T=3) | P(T=2|T=3) | P(T=3|T=3) |
+| wsize (std) | wsize (mean) | offset | P(T=1!T=1) | P(T=2!T=1) | P(T=3!T=1) | P(T=1!T=2) | P(T=2!T=2) | P(T=3!T=2) | P(T=1!T=3) | P(T=2!T=3) | P(T=3!T=3) |
 | ----------- | ------------ | ------ |----------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 | 100         | 10           | 28     | 0.7874     | 0.1697     | 0.0428     | 0.1697     | 0.6511     | 0.1791     | 0.0428     | 0.1791     | 0.7780     |
 | 100         | 20           | 30     | 0.8109     | 0.1504     | 0.0387     | 0.1504     | 0.6934     | 0.1561     | 0.0387     | 0.1561     | 0.8052     |
@@ -152,7 +152,7 @@ Comparing the tables, it indeed can be observed that the probabilties for mis-cl
 
 Conclusion: 'wsize' for std(mag) should be 125, for mean(head) should be 125, resulting in an offset of 63 and the following probabilties:
 
-| wsize (std) | wsize (mean) | offset | P(T=1|T=1) | P(T=2|T=1) | P(T=3|T=1) | P(T=1|T=2) | P(T=2|T=2) | P(T=3|T=2) | P(T=1|T=3) | P(T=2|T=3) | P(T=3|T=3) |
+| wsize (std) | wsize (mean) | offset | P(T=1!T=1) | P(T=2!T=1) | P(T=3!T=1) | P(T=1!T=2) | P(T=2!T=2) | P(T=3!T=2) | P(T=1!T=3) | P(T=2!T=3) | P(T=3!T=3) |
 | ----------- | ------------ | ------ |----------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 | 125         | 125          | 63     | 0.8779     | 0.0856     | 0.0365     | 0.0856     | 0.8333     | 0.0811     | 0.0365     | 0.0811     | 0.8824     |
 
