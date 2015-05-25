@@ -174,10 +174,31 @@ k-NN determines the motiontype of a sample, based on the distribution of the mot
 Each area is constructed by combining the binairy resuls of: 'area(idle) = ((pdf(idle) > pdf(walk)) && (pdf(idle) > pdf(step))'
 What is interesting to notice is that 'step' only comprehends a small area. It could be imagined that 'step' is the transition from 'idle' to 'walk', hence the the area of 'walk' and 'idle' should be isolated by 'step', which clearly is not the case. Another interesting observation is the spreading of 'idle': according to the datset 'idle' has either a low 'mean(head)' of a low 'std(magnitude)'.
 
+Using this 2D image, we are also able to determine the maximum performance of k-NN using euclidian distance: By calculating the sum of the pdf of a motiontype of the area of which it is determined that a sample will get this motiontype, we get the percentual number of samples of correctly classified measurements. 
+
+```
+area_idle = ((pdf_idle > pdf_walk) && (pdf_idle > pdf_step))
+correct   = sum(sum(pdf_idle(area_idle)))/sum(sum(pdf_idle))
+```
+`
+
+| motiontype | %correct |
+| ---------- | -------- |
+| idle       | 90%      |
+| step       | 94%      |
+| walk       | 90%      |
+| total      | 75%      |
+
+Hence, ideally, given the above determined features, windowsizes and assuming independence of the features, the best performance will result in 75% correct classification (idle*step*walk). 
 
 ## Classification 1
 
+Using all these fancy probabilities: lets check if it all perfoms well. For classification, the trained data is used. This data is not smoothed or corrected with the generlised extreme value distributions, and hence may show more errors than calculated with the combined feature set.
+
 ### unfiltered results
+
+
+
 
 ### filtering
 
