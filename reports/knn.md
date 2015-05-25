@@ -26,6 +26,7 @@ The 'motiontype' line describes the annotated activity:
 - 4: step
 
 Some statistics of the dataset:
+
 | statistic       | value  |
 | --------------- | ------ |
 | #runs           | 3      |
@@ -72,7 +73,7 @@ Ideally these activities should be classified as 'noise': since they do not incl
 
 ### wsize and offset
 From [pdfComparison](pdfComparison.md) we have determined that the standard deviation of the magnitude with an windowsize of 125 samples (2.5 seconds) and the mean of the heading (200 samples) results in the highest clasification probabilties:
- 
+
 | feature    | P(T=1|T=1) | P(T=2|T=1) | P(T=3|T=1) | P(T=1|T=2) | P(T=2|T=2) | P(T=3|T=2) | P(T=1|T=3) | P(T=2|T=3) | P(T=3|T=3) |
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 | std(mag)   | 0.7874     | 0.1309     | 0.0817     | 0.1309     | 0.6100     | 0.2591     | 0.0817     | 0.2591     | 0.6592     |
