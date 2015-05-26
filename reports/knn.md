@@ -176,20 +176,17 @@ What is interesting to notice is that 'step' only comprehends a small area. It c
 
 Using this 2D image, we are also able to determine the maximum performance of k-NN using euclidian distance: By calculating the sum of the pdf of a motiontype of the area of which it is determined that a sample will get this motiontype, we get the percentual number of samples of correctly classified measurements. 
 
-```
-area_idle = ((pdf_idle > pdf_walk) && (pdf_idle > pdf_step))
-correct   = sum(sum(pdf_idle(area_idle)))/sum(sum(pdf_idle))
-```
-`
+`area_idle = ((pdf_idle > pdf_walk) && (pdf_idle > pdf_step))`
+`correct   = sum(sum(pdf_idle(area_idle)))/sum(sum(pdf_idle))`
 
 | motiontype | %correct |
 | ---------- | -------- |
 | idle       | 90%      |
 | step       | 94%      |
 | walk       | 90%      |
-| total      | 75%      |
+| total      | 91%      |
 
-Hence, ideally, given the above determined features, windowsizes and assuming independence of the features, the best performance will result in 75% correct classification (idle*step*walk). 
+Hence, ideally, given the above determined features, windowsizes and assuming independence of the features, the best performance will result in 91% correct classification ((idle + step + walk)/3). 
 
 ## Classification 1
 
@@ -197,26 +194,81 @@ Using all these fancy probabilities: lets check if it all perfoms well. For clas
 
 ### unfiltered results
 
+`wstd=125;wmean=125;`
+`[f_log, ft_log] = featureTrain2(log_run, log_mt, log_accel, wstd, wmean);`
+`f_tst = signal2feature2(tst_accel, wstd, wmean);`
+`mt_tst = knn(f_log, f_tst, 5);`
+`tst_mt_offset = tst_mt(round((wstd+wmean)/4):round((wstd+wmean)/4)+size(mt_tst,1)-1);`
+`result = mtError(tst_mt_offset, mt_tst)`
+
+Below the error-counts for different k-values are shown.
 
 
+| k   | %err       | %idle      | %step      | %walk      | P(T=2!T=1) | P(T=2!T=1) | P(T=3!T=1) | P(T=1!T=2) | P(T=2!T=2) | P(T=3!T=2) | P(T=1!T=3) | P(T=2!T=3) | P(T=3!T=3) |
+| --- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
+| 5   | 0.2067     | 0.3759     | 0.3506     | 0.2736     | 0.8929     | 0.0268     | 0.0804     | 0.3751     | 0.2754     | 0.3495     | 0.3024     | 0.0211     | 0.6764
+| 15  | 0.2051     | 0.3787     | 0.3429     | 0.2783     | 0.8929     | 0.0285     | 0.0787     | 0.3386     | 0.2965     | 0.3649     | 0.3060     | 0.0207     | 0.6733
+| 25  | 0.2040     | 0.3858     | 0.3408     | 0.2734     | 0.8915     | 0.0271     | 0.0814     | 0.3252     | 0.3047     | 0.3700     | 0.2960     | 0.0233     | 0.6807
+| 35  | 0.2024     | 0.3992     | 0.3394     | 0.2614     | 0.8886     | 0.0286     | 0.0828     | 0.3140     | 0.3129     | 0.3731     | 0.2778     | 0.0250     | 0.6972
+| 45  | 0.2005     | 0.4049     | 0.3390     | 0.2560     | 0.8880     | 0.0292     | 0.0828     | 0.3147     | 0.3201     | 0.3652     | 0.2659     | 0.0280     | 0.7062
+| 55  | 0.1998     | 0.4065     | 0.3365     | 0.2570     | 0.8880     | 0.0300     | 0.0820     | 0.3030     | 0.3276     | 0.3693     | 0.2620     | 0.0319     | 0.7062
+| 75  | 0.1982     | 0.4131     | 0.3356     | 0.2513     | 0.8871     | 0.0319     | 0.0810     | 0.3020     | 0.3348     | 0.3632     | 0.2520     | 0.0330     | 0.7150
+| 95  | 0.1958     | 0.4237     | 0.3353     | 0.2410     | 0.8856     | 0.0321     | 0.0822     | 0.3006     | 0.3437     | 0.3557     | 0.2413     | 0.0287     | 0.7300
+| 115 | 0.1971     | 0.4363     | 0.3347     | 0.2290     | 0.8814     | 0.0326     | 0.0860     | 0.3010     | 0.3403     | 0.3587     | 0.2289     | 0.0293     | 0.7417      
+| 135 | 0.2011     | 0.4535     | 0.3282     | 0.2183     | 0.8742     | 0.0327     | 0.0930     | 0.3041     | 0.3399     | 0.3560     | 0.2229     | 0.0283     | 0.7488
+| 155 | 0.2005     | 0.4596     | 0.3259     | 0.2145     | 0.8729     | 0.0318     | 0.0952     | 0.3020     | 0.3464     | 0.3516     | 0.2180     | 0.0282     | 0.7539
+| 175 | 0.2006     | 0.4623     | 0.3238     | 0.2139     | 0.8722     | 0.0320     | 0.0959     | 0.3000     | 0.3505     | 0.3495     | 0.2180     | 0.0276     | 0.7544
+
+                                           0.1860    0.3372    0.4053    0.2575    0.9135    0.0021    0.0844    0.3611    0.2460    0.3929    0.2741         0    0.7259
+
+On average 20 percent of the samples are incorrectly classified. From this 20 percent, 'step' is in wrongly classified 1/3th of time (6.5% of all data), with 'idle' at 40 percent (8% of all data) and 'step' is only incorrect 25 percent (5% of all data). Interestingly, the value for 'k' has little effect on the error: it was assumed that a larger 'k' compares more values and hence should produce better results. Still, the overal error changes with 1 percent among all k-values, which roughly compares to 300 extra samples which are correct classified.
+
+The probibility distribution of the classified data gives also some insights into the perfomance. If the results are compared with the expected values of a generelised extreme value distribution fit, we see that the classification for 'idle' are comparable. However, 'step' has roughly a random change (1/3) of being correctly classfied, while 'walk' is a bit lower then expected, but still results in comparable performance.
+
+Concluding from these result, we could state that a 'k'-value of 95 might give the best results: the average error is lowest and the classification of 'step' is one of the better ones. 
 
 ### filtering
 
-### filtered results
+The shown data is not filtered. Since we have some domain knowledge, we are able to remove some errors. 
 
+Error removal is done in 2 stages: first a mathematical approach is applied, which includes erosion and averaging of the values. The seconds stage consists of the application of a logical filter: incorporating domain knowledge, such as the minimal duration of a walk, the distinction of step and walk and minimim period of idle needed between steps.
+
+Using a 'k' value of 95, the following (raw) results are obtained. The blue line is the annotation of the test-dataset, while the red line is the annotation determined with k-NN. 
+
+![classification with k=95](figs/classification_k95_unfiltered_raw.png)
+
+Without going into details about the filter, several approaches were tested, which give some clear insights into the data. Below are the classificiation errors after filterming
+
+| filter   | %err       | %idle      | %step      | %walk      | P(T=2!T=1) | P(T=2!T=1) | P(T=3!T=1) | P(T=1!T=2) | P(T=2!T=2) | P(T=3!T=2) | P(T=1!T=3) | P(T=2!T=3) | P(T=3!T=3) |
+| -------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
+| raw, k95 | 0.1958     | 0.4237     | 0.3353     | 0.2410     | 0.8856     | 0.0321     | 0.0822     | 0.3006     | 0.3437     | 0.3557     | 0.2413     | 0.0287     | 0.730
+| trail1   | 0.1860     | 0.3372     | 0.4053     | 0.2575     | 0.9135     | 0.0021     | 0.0844     | 0.3611     | 0.2460     | 0.3929     | 0.2741     | 0          | 0.7259
+| trail2   | 0.1943     | 0.2826     | 0.4146     | 0.3028     | 0.9243     | 0.0008     | 0.0748     | 0.4578     | 0.1944     | 0.3478     | 0.3367     | 0          | 0.6633
+| trail3   | 0.1877     | 0.4189     | 0.3759     | 0.2052     | 0.8916     | 0.0038     | 0.1046     | 0.2832     | 0.2945     | 0.4223     | 0.2188     | 0.0016     | 0.7797
+| trail4   | 0.1888     | 0.5144     | 0.3667     | 0.1189     | 0.8661     | 0.0081     | 0.1258     | 0.2573     | 0.3075     | 0.4353     | 0.1253     | 0.0031     | 0.8716
+| trail5   | 0.1842     | 0.5599     | 0.3731     | 0.0670     | 0.8578     | 0.0106     | 0.1317     | 0.6365     | 0.3126     | 0.0509     | 0.0706     | 0          | 0.9294
+
+Clearly, filtering the data does not decrease the error a lot. Furthermore, the probability of correctly classifying 'step', drops below random, while the accuracy of 'step' and 'walk' increases. It could be expected, that when the total number of errors in the data is low, the classification tends to approach random, as there might be some noise in the data. However, the error in 'step' is in 6% of the data, while the total number of 'step' samples in the test set is just under 10%. 
+
+Hence, it might be concluded that the diverensation of 'step' might not give an additional benefit as a third motion type. Possibly, a simple distinction between 'walk' and 'idle' might result in less errors and better classification.
 
 ## Classification 2
 
-### noise correction: resampling using pdfs
+Based on the previous findings, analysis is done 
 
-### Sample distribution
+### Train data analysis
 
-### unfiltered results
+pdf, wsize, k-value...
+
+### Test results
 
 ### filtering
 
-### filtered results
+### Noise correction: features from pdf
 
+### Test results
+
+### filtering
 
 ## Conclusion
 
