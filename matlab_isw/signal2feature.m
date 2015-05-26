@@ -26,11 +26,13 @@ function f = signal2feature(accel, wstd, wmean, tmin, tmax)
         magh = mean(sqrt(sum((a2 - a1).^2, 2)));
 
         %NASC
+        cor = 0;
+%{
         [cor1,t1] = nasc(i, accel(:,1), tmin, tmax);
         [cor2,t2] = nasc(i, accel(:,2), tmin, tmax);
         [cor3,t3] = nasc(i, accel(:,3), tmin, tmax);
         cor  = max(cor1, max(cor2, cor3));
-
+%}
         %add to feature vector
         f(i,:) = [mag_std, magh, cor];
     end

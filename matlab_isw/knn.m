@@ -12,7 +12,7 @@ function m = knn(dbfeatures, sfeatures, k)
         f = f(ones(size(dbfeatures,1),1),:);
         
         %get difference in vectors
-        df = dbfeatures(:,2:4) - f;
+        df = dbfeatures(:,2:end) - f;
         df = sum(df.^2,2);  %omit sqrt: time consuming and not needed
         
         %sort on smallest distance first

@@ -7,7 +7,7 @@ function [m_log m_math] = s2fFilter(m, factor)
     maxidx = size(m,1);
     m_erode = zeros(size(m));
     m_erode(1) = idle;
-    m_math = m_erode;
+    m_math = m;
 
     erode_i = false;
     to_i    = 0;
@@ -15,9 +15,7 @@ function [m_log m_math] = s2fFilter(m, factor)
 
     f2 = round(factor/2);
 
-    
-
-    
+%{
     %time taken for filtering: 2*factor
     % factor = 10 --> 20 samples = 2/5 of a second
     for i=2:maxidx-factor
@@ -38,13 +36,12 @@ function [m_log m_math] = s2fFilter(m, factor)
             m_math(i-f2) = mode(m_erode(start:i));
         end
     end
-
+%}
 
 
     %time taken for processing motion
     minwalk = 200; %4seconds = minimal time a 'walk' should take
-    minidle = 100; %4seconds = minimal an 'idle' moment should take
-
+    minidle = 150; %4seconds = minimal an 'idle' moment should take
 
     %tracking indices for beginning and end of 'idle' motion
     istart = 0;
@@ -63,10 +60,6 @@ function [m_log m_math] = s2fFilter(m, factor)
 
     for i=2:maxidx-factor
         
-        if (i > 9199) && (i < 9647)
-            disp(sprintf('%d - i:%d s:%d w:%d', i, icount, scount, wcount));
-        end
-
         %check if motion has ended
         if (icount >= minidle) && (istart > iend) && (inmotion) && ((scount > 0) || (wcount > 0))
 
@@ -74,18 +67,18 @@ function [m_log m_math] = s2fFilter(m, factor)
             % we found a step if walk < minwalk
             if (istart-iend < minwalk)
                 if (scount > wcount)
-                    disp(sprintf('MOTION(step): %d-%d', iend, istart));
+                    %disp(sprintf('MOTION(step): %d-%d', iend, istart));
                     m_log(iend:istart) = step;
                 else
-                    disp(sprintf('MOTION(?short walk?): %d-%d s/w: %.2f/%.2f', iend, istart, scount/(wcount+scount), wcount/(wcount+scount)));
-                    m_log(iend:istart) = walk;
+                    %disp(sprintf('MOTION(?short walk?): %d-%d s/w: %.2f/%.2f', iend, istart, scount/(wcount+scount), wcount/(wcount+scount)));
+                    %m_log(iend:istart) = step;
                 end
             else
                 if (scount > wcount)
-                    disp(sprintf('MOTION(?large step?): %d-%d s/w: %.2f/%.2f', iend, istart, scount/(wcount+scount), wcount/(wcount+scount)));
-                    m_log(iend:istart) = step;
+                    %disp(sprintf('MOTION(?large step?): %d-%d s/w: %.2f/%.2f', iend, istart, scount/(wcount+scount), wcount/(wcount+scount)));
+                    %m_log(iend:istart) = step;
                 else
-                    disp(sprintf('MOTION(walk): %d-%d', iend, istart));
+                    %disp(sprintf('MOTION(walk): %d-%d', iend, istart));
                     m_log(iend:istart) = walk;
                 end
             end

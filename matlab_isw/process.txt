@@ -1,0 +1,78 @@
+
+%import annotated log
+file = '../logs/log_accelActivity1431957054688_corrected.txt';
+[log_time, log_run, log_a, log_mt, log_accel, log_mag] = logImport(file, true);
+
+%select suitable part for training
+tr_run   = log_run(s1:e1, :);
+tr_accel = log_accel(s1:e1, :);
+tr_mt    = log_mt(s1:e1, :);
+
+% calculate features
+wstd  = 125
+wmean = 200
+tmin  = 40
+tmax  = 100
+tr_feature_r = featureTrain(tr_accel, tr_mt, tr_accel, wstd, wmean, tmin, tmax);
+
+%correct annotation of features
+% (due too different window sizes, some errors might occur)
+tr_feature_s = featureCorrect(tr_feature_r, 15);
+
+%import log to do testing on
+file = '../logs/log_accelActivity1431783218979.txt'
+[tst_time, tst_run, tst_a, tst_mt, tst_accel, tst_mag] = logImport(file, true);
+
+%select suitable part for testing and calculate features
+fs = signal2feature(tst_accel(s2:e2,:), wstd, wmean, tmin, tmax);
+
+%classification
+fs_mt_r = knn(tr_feature_s, fs, 5);
+
+% smoothen data and determine timestamps
+[fs_mt_log fs_mt_math] = s2fFilter(fs_mt_r, 10);
+
+
+%plot data
+>> figure(2);clf;hold on; plot(fs_mt_r, 'Color', [0 0 0]); plot(fs_mt-0.05, 'Color', [1 0 0]);plot(fs_mt_math-0.1, 'Color', [0 1 0]);plot(fs_mt_log-0.15, 'Color', [0 0 1]);
+
+
+%test2
+[tst_time2, tst_run2, tst_a2, tst_mt2, tst_accel2, tst_mag2] = logImport('../logs/log_accelActivity1432302990414.txt', true);
+fs2 = signal2feature(tst_accel2, wstd, wmean, tmin, tmax);
+fs_mt_r2 = knn(tr_feature_s, fs2, 5);
+[fs_mt_log2 fs_mt_math2] = s2fFilter(fs_mt_r2, 10);
+figure(2);clf;hold on; plot(tst_mt2, 'Color', [0 0 0]);plot(fs_mt_r2-0.05, 'Color', [1 0 0]);plot(fs_mt_math2-0.1, 'Color', [0 1 0]);plot(fs_mt_log2-0.15, 'Color', [0 0 1]);
+
+
+
+fs_mt_r3 = knn(tr_feature_s(:,1:3), fs2(:,1:2), 15);
+[fs_mt_log3 fs_mt_math3] = s2fFilter(fs_mt_r3, 10);
+figure(4);clf;hold on; plot(tst_mt2, 'Color', [0 0 0]);plot(fs_mt_r3-0.05, 'Color', [1 0 0]);plot(fs_mt_math3-0.1, 'Color', [0 1 0]);plot(fs_mt_log3-0.15, 'Color', [0 0 1]);
+
+
+figure(40);clf;hold on; lot(tst_mt, 'Color', [0 0 0]); plot(knn_log_tst, 'Color', [1 0 0]);
+
+——
+
+K = 2;
+k = 0.01;
+
+%mag std
+[stdi, stds, stdw] = calcStd(wstd, log_run, log_mt, log_mag);
+[dgev, hi, xi, hs, xs, hw, xw] = calcPdfHist(stdi, stds, stdw, K, k);
+plotPDF(Y, K, dgev, hi, xi, hs, xs, hw, xw, wmean, ‘pdf mean’, false, ‘’)
+
+%heading
+math = zeros(size(accel_r,1)-wmean-1, 1);
+for i=2:size(access,1)-wmean
+    a1      = accel_r(i+0:i-1+wmean,:);
+    a2      = accel_r(i+1:i+0+wmean,:);
+    magh(i) = mean(sqrt(sum((a2 - a1).^2, 2)));
+end
+
+[meani, means, meanw] = calcMean(wmean, log_run, log_mt, magh);
+[dgev, hi, xi, hs, xs, hw, xw] = calcPdfHist(meani, means, meanw, K, k);
+plotPDF(Y, K, dgev, hi, xi, hs, xs, hw, xw, wmean, ‘pdf mean’, false, ‘’)
+
+
